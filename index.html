@@ -232,6 +232,27 @@ p.body{max-width:62ch;color:var(--ink-soft);margin-top:18px}
 .cmx-src{font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin-top:18px;line-height:1.7;
   border-left:2px solid var(--line);padding-left:14px}
 
+/* gallery of redrawn matrices */
+.axis-demo-head{margin-top:26px}
+.cmx-gallery{display:flex;flex-wrap:wrap;gap:22px;margin-top:20px}
+.mini-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.mini-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.mini-badge{font-family:var(--mono);font-size:.72rem;font-weight:600;background:var(--ink);color:var(--paper);padding:3px 9px;border-radius:6px}
+.mini-badge.alt{background:var(--fn)}
+.mini-title{font-family:var(--serif);font-size:1.02rem;font-weight:600}
+.mini-body{display:flex;align-items:stretch;gap:7px}
+.mini-right{display:flex;flex-direction:column;gap:6px}
+.mini-axiscol{font-size:.6rem!important}
+.mini-vaxis{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font-size:.6rem!important}
+.mini-grid{display:inline-grid;gap:3px}
+.mini-cell{display:flex;align-items:center;justify-content:center;border-radius:5px;font-family:var(--mono);font-size:.56rem;font-weight:500;transition:background .4s}
+.mini-clabel{font-family:var(--mono);font-size:.56rem;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;min-height:14px}
+.mini-rlabel{font-family:var(--mono);font-size:.56rem;color:var(--ink-soft);display:flex;align-items:center;justify-content:flex-end;padding-right:3px}
+.cmx-allpapers{margin-top:26px}
+.chip-label{font-family:var(--mono);font-size:.74rem;color:var(--ink-soft);letter-spacing:.02em}
+.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.paper-chip{font-family:var(--mono);font-size:.72rem;border:1px solid var(--line);border-radius:20px;padding:4px 11px;color:var(--ink-soft);background:var(--paper)}
+
 /* call to action / conclusion */
 .cta{text-align:center;padding:14vh 0}
 .cta h2{margin:0 auto 24px;max-width:22ch}
@@ -511,14 +532,13 @@ footer{background:var(--paper-2);border-top:1px solid var(--line);padding:60px 0
         <button class="axis-btn" data-mode="x">Ground truth · x-axis</button>
         <button class="axis-btn" data-mode="none">No axis labels</button>
       </div>
-      <div class="axis-demo-body">
-        <div class="cmx" id="cmxRender"></div>
-        <div class="cmx-meta">
-          <div class="cmx-title" id="cmxTitle"></div>
-          <p class="cmx-desc" id="cmxDesc"></p>
-          <div class="cmx-src" id="cmxSrc"></div>
-        </div>
+      <div class="axis-demo-head">
+        <div class="cmx-title" id="cmxTitle"></div>
+        <p class="cmx-desc" id="cmxDesc"></p>
       </div>
+      <div class="cmx-gallery" id="cmxGallery"></div>
+      <div class="cmx-allpapers" id="cmxAll"></div>
+      <div class="cmx-src" id="cmxSrc"></div>
     </div>
 
     <p class="body reveal" style="margin-top:32px">All three panels above are real confusion matrices pulled from the surveyed corpus — yet a reader fluent in the format still has to re-orient at nearly every figure. Multiply that friction across a literature, and the promise of a "standard" diagnostic view quietly erodes.</p>
@@ -698,86 +718,103 @@ const numObs=new IntersectionObserver((en)=>{
 },{threshold:.6});
 document.querySelectorAll('.num[data-count]').forEach(el=>numObs.observe(el));
 
-/* ---------- axis orientation demonstrator (real CMs from the corpus) ---------- */
+/* ---------- axis orientation demonstrator: galleries of CMs from the corpus ---------- */
+/* Matrices redrawn from each paper's own figure/table; orientation read from the source.
+   The survey reports only the aggregate split (26 / 3 / 13), not a per-paper list. */
 const axisData = {
   y:{
     title:"Ground truth on the y-axis",
-    desc:"The rough majority convention: rows are the true class, columns are the model's prediction. Read across a row to see how one true class was distributed.",
-    src:"Source · [13] Multi-attention DRNN for nursing action evaluation (Fig. 3a). Rows = Ground Truth, columns = Predictions.",
-    classes:["CS","IS","CT","IT"],
-    rows:[[0.92,0.08,0,0],[0.04,0.92,0,0.04],[0,0,0.83,0.17],[0,0,0,1]],
-    fmt:"dec", labels:true, gt:"y"
+    desc:"The rough-majority convention — rows are the true class, columns the model's prediction. The survey counted 26 papers using it. Every matrix below is redrawn from the original figure.",
+    rowTxt:"Ground truth", colTxt:"Predicted →", gt:"y",
+    examples:[
+      {n:13,t:"Nursing actions · DRNN",cls:["CS","IS","CT","IT"],fmt:"dec",
+       m:[[.92,.08,0,0],[.04,.92,0,.04],[0,0,.83,.17],[0,0,0,1]]},
+      {n:23,t:"Attention shifts",cls:["Distr.","Task"],fmt:"dec",
+       m:[[.51,.49],[.33,.67]]},
+      {n:35,t:"AR state recognition",cls:["0","1","2","3","4","5"],fmt:"dec",
+       m:[[1,0,0,0,0,0],[0,.94,.03,.02,.01,0],[0,.07,.87,.05,.01,0],[0,0,.03,.96,0,0],[0,0,0,0,1,0],[0,0,0,0,.02,.98]]},
+      {n:66,t:"Music mood · FlowSMM",cls:["Ang","Dep","Drk","Hap","Laz","Neu"],fmt:"pct",
+       m:[[94.2,0,0,0,0,5.8],[0,85.8,0,0,1.7,12.5],[0,4.2,95.8,0,0,0],[0,0,0,86.7,0,13.3],[0,3.3,0,0,93.3,3.4],[0,4.2,0,3.3,0,92.5]]}
+    ],
+    restLabel:"Also categorized as y-axis ground truth (true label on rows):",
+    rest:[1,2,5,6,14,19,21,24,26,27,43,46,48,49,51,52,57,60,62,67],
+    src:"Redrawn from each paper's confusion matrix; orientation read from the source figures. Survey aggregate: 26 papers."
   },
   x:{
     title:"Ground truth on the x-axis",
-    desc:"The flipped convention used by only three papers — the transpose of the majority. Here columns are the true class and rows are the prediction. Identical information, mirrored across the diagonal.",
-    src:"Source · [47] Adapting Virtual Embodiment Through Reinforcement Learning (Table 2). Rows = Predicted Class, columns = Actual Class (%).",
-    classes:["Detected","Not det."],
-    rows:[[28.6,14.6],[18.3,39.2]],
-    fmt:"pct", labels:true, gt:"x"
+    desc:"Only three papers flipped it — true class on the columns, prediction on the rows. It's the transpose of the majority: identical information, mirrored across the diagonal.",
+    rowTxt:"Predicted", colTxt:"Ground truth →", gt:"x",
+    examples:[
+      {n:47,t:"Virtual embodiment",cls:["Detected","Not det."],fmt:"pct",
+       m:[[28.6,14.6],[18.3,39.2]]},
+      {n:61,t:"EBBE-Text",cls:["Pos","Neg"],fmt:"int",
+       m:[[4684,702],[2,3584]]}
+    ],
+    restLabel:"The third x-axis paper:",
+    rest:[4],
+    src:"[4], [47] and [61] are the three x-axis papers — matching the survey's count. [4] uses a 26-class letter matrix (Predicted on y, Actual on x); values above are from each source."
   },
   none:{
     title:"No axis labels at all",
     desc:"Thirteen papers showed a colored grid with neither axis named. The strong diagonal signals a capable model — but which side is truth and which is prediction? You're left to guess.",
-    src:"Examples · [25] Hand Gesture Recognition · [43] Synthesizing Camera Noise · [30] DeepVID. Bare heatmaps with no axis labels.",
-    classes:["","","","","",""],
-    rows:[[.97,.01,0,.02,0,0],[.02,.94,.03,0,.01,0],[0,.04,.91,.03,.02,0],[.01,0,.05,.92,0,.02],[0,.02,0,.01,.95,.02],[0,0,.01,0,.03,.96]],
-    fmt:"dec", labels:false, gt:"none"
+    rowTxt:"?", colTxt:"?", gt:"none",
+    examples:[
+      {n:null,t:"Typical bare heatmap",cls:["","","","","",""],fmt:"dec",schematic:true,
+       m:[[.97,.01,0,.02,0,0],[.02,.94,.03,0,.01,0],[0,.04,.91,.03,.02,0],[.01,0,.05,.92,0,.02],[0,.02,0,.01,.95,.02],[0,0,.01,0,.03,.96]]}
+    ],
+    restLabel:"Papers presenting matrices with no axis labels:",
+    rest:[25,29,30,31,32,34,36,38,41,53,56,65],
+    src:"Schematic shown; the listed papers print matrices without axis labels. Papers [38] and [55] switched conventions within a single paper. Survey aggregate: 13 papers."
   }
 };
 function fmtVal(v,fmt){
   if(fmt==="pct") return v.toFixed(1);
+  if(fmt==="int") return Math.round(v).toString();
   if(v===0) return "0";
-  return v.toFixed(2).replace(/0$/,"");
+  if(v===1) return "1";
+  return v.toFixed(2);
 }
-function renderCM(mode){
-  const d=axisData[mode], n=d.classes.length;
-  const max=Math.max(...d.rows.flat());
-  let grid='<div class="cmx-grid" style="grid-template-columns:'+(d.labels?'46px ':'')+'repeat('+n+',52px)">';
-  // header row: corner + column class labels
-  if(d.labels){
-    grid+='<div class="cmx-corner"></div>';
-    d.classes.forEach(c=>{grid+='<div class="cmx-clabel">'+c+'</div>';});
-  }
-  // data rows
-  d.rows.forEach((row,i)=>{
-    if(d.labels) grid+='<div class="cmx-rlabel">'+d.classes[i]+'</div>';
+function buildMini(ex,d){
+  const n=ex.cls.length;
+  const size = n<=2?44:(n<=4?32:20);
+  const max=Math.max(...ex.m.flat());
+  const showNums = n<=4 && !ex.schematic;
+  const showCls = n<=4 && d.gt!=="none";
+  let grid='<div class="mini-grid" style="grid-template-columns:'+(showCls?"auto ":"")+'repeat('+n+','+size+'px)">';
+  if(showCls){ grid+='<div></div>'; ex.cls.forEach(c=>{grid+='<div class="mini-clabel">'+c+'</div>';}); }
+  ex.m.forEach((row,i)=>{
+    if(showCls) grid+='<div class="mini-rlabel">'+ex.cls[i]+'</div>';
     row.forEach(v=>{
-      const a=max>0?v/max:0;
-      const alpha=(0.05+0.92*a).toFixed(3);
+      const a=max>0?v/max:0, alpha=(0.05+0.92*a).toFixed(3);
       const col=a>0.5?'#fff':(v===0?'var(--ink-faint)':'var(--ink)');
-      grid+='<div class="cmx-cell" style="background:rgba(214,51,108,'+alpha+');color:'+col+'">'+fmtVal(v,d.fmt)+'</div>';
+      grid+='<div class="mini-cell" style="width:'+size+'px;height:'+size+'px;background:rgba(214,51,108,'+alpha+');color:'+col+'">'+(showNums?fmtVal(v,ex.fmt):"")+'</div>';
     });
   });
   grid+='</div>';
-
-  // axis labels
-  const colTxt = d.gt==="none" ? '?' : (d.gt==="x" ? 'Ground truth →' : 'Predicted →');
-  const rowTxt = d.gt==="none" ? '?' : (d.gt==="y" ? 'Ground truth' : 'Predicted');
-  const colCls = d.gt==="none" ? 'ghost' : (d.gt==="x" ? '' : 'muted');
-  const rowCls = d.gt==="none" ? 'ghost' : (d.gt==="y" ? '' : 'muted');
-
-  let html='<div class="cmx-top">';
-  html+='<div class="cmx-axis '+colCls+'">'+colTxt+'</div>';
-  html+='<div class="cmx-row">';
-  html+='<div class="cmx-vaxis cmx-axis '+rowCls+'">'+rowTxt+'</div>';
-  html+=grid;
-  html+='</div></div>';
-
-  document.getElementById('cmxRender').innerHTML=html;
+  const colCls = d.gt==="none"?"ghost":(d.gt==="x"?"":"muted");
+  const rowCls = d.gt==="none"?"ghost":(d.gt==="y"?"":"muted");
+  const badge = ex.schematic?"style":("["+ex.n+"]");
+  return '<div class="mini-card">'
+    +'<div class="mini-head"><span class="mini-badge'+(ex.schematic?" alt":"")+'">'+badge+'</span><span class="mini-title">'+ex.t+'</span></div>'
+    +'<div class="mini-body"><div class="mini-vaxis cmx-axis '+rowCls+'">'+d.rowTxt+'</div>'
+    +'<div class="mini-right"><div class="mini-axiscol cmx-axis '+colCls+'">'+d.colTxt+'</div>'+grid+'</div></div>'
+    +'</div>';
+}
+function renderAxis(mode){
+  const d=axisData[mode];
   document.getElementById('cmxTitle').textContent=d.title;
   document.getElementById('cmxDesc').textContent=d.desc;
+  document.getElementById('cmxGallery').innerHTML=d.examples.map(ex=>buildMini(ex,d)).join('');
+  const chips=d.rest.map(p=>'<span class="paper-chip">['+p+']</span>').join('');
+  document.getElementById('cmxAll').innerHTML='<div class="chip-label">'+d.restLabel+'</div><div class="chip-row">'+chips+'</div>';
   document.getElementById('cmxSrc').textContent=d.src;
-}
-function setAxisMode(mode){
   document.querySelectorAll('.axis-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
   document.querySelectorAll('.axisviz .card').forEach(c=>c.classList.toggle('sel',c.dataset.mode===mode));
-  renderCM(mode);
 }
 document.querySelectorAll('.axis-btn, .axisviz .card').forEach(el=>{
-  el.addEventListener('click',()=>setAxisMode(el.dataset.mode));
+  el.addEventListener('click',()=>renderAxis(el.dataset.mode));
 });
-renderCM('y');
+renderAxis('y');
 </script>
 </body>
 </html>
