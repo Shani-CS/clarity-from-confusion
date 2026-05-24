@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clarity from Confusion — A Scrollytelling Survey</title>
+<meta name="description" content="An interactive walkthrough of 'Clarity from Confusion: A Survey of Design Choices for Machine Learning Performance Visualization' by Spivak, Creamer, Tory & Borkin.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;1,9..144,400&family=Spline+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f3efe6;
+  --paper-2:#ece6da;
+  --ink:#1b1815;
+  --ink-soft:#4a443c;
+  --ink-faint:#8a8275;
+  --line:#d8d0c1;
+  --tp:#d6336c;   /* True Positive  */
+  --fp:#e6912c;   /* False Positive */
+  --fn:#d9534f;   /* False Negative */
+  --tn:#3a9d7e;   /* True Negative  */
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Spline Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",monospace;
+  --maxw:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:18px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+/* subtle paper grain */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.4;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+a{color:inherit}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+
+/* progress bar */
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;
+  background:linear-gradient(90deg,var(--tp),var(--fp),var(--tn));z-index:1000;transition:width .1s linear}
+
+/* tiny matrix tag */
+.tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint)}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:80px 32px;position:relative;overflow:hidden}
+.hero .grid-bg{position:absolute;inset:0;z-index:0;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:54px 54px;opacity:.35;mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 75%)}
+.hero-inner{max-width:var(--maxw);margin:0 auto;width:100%;position:relative;z-index:1}
+.eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--tp);margin-bottom:28px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.eyebrow .dot{width:9px;height:9px;border-radius:2px;display:inline-block}
+h1.title{font-family:var(--serif);font-weight:600;font-size:clamp(2.8rem,8vw,6.6rem);
+  line-height:.98;letter-spacing:-.02em;max-width:14ch}
+h1.title em{font-style:italic;color:var(--tp);font-weight:500}
+.subtitle{font-family:var(--serif);font-style:italic;font-size:clamp(1.2rem,2.6vw,1.85rem);
+  color:var(--ink-soft);margin-top:34px;max-width:42ch;line-height:1.4}
+.byline{margin-top:42px;font-size:.95rem;color:var(--ink-soft);max-width:60ch}
+.byline strong{font-weight:600;color:var(--ink)}
+.scroll-cue{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--ink-faint);
+  display:flex;flex-direction:column;align-items:center;gap:10px;z-index:1}
+.scroll-cue .bar{width:1px;height:42px;background:var(--ink-faint);animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:scaleY(.35);opacity:.4;transform-origin:top}50%{transform:scaleY(1);opacity:1;transform-origin:top}}
+
+/* floating matrix mini in hero */
+.hero-matrix{position:absolute;right:6%;top:50%;transform:translateY(-50%) rotate(-6deg);
+  display:grid;grid-template-columns:repeat(2,72px);grid-template-rows:repeat(2,72px);gap:8px;z-index:0;opacity:.9}
+.hero-matrix div{border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:600;color:#fff;font-size:.95rem;box-shadow:0 12px 30px rgba(0,0,0,.12);
+  animation:floaty 6s ease-in-out infinite}
+.hero-matrix div:nth-child(1){background:var(--tp);animation-delay:0s}
+.hero-matrix div:nth-child(2){background:var(--fp);animation-delay:.6s}
+.hero-matrix div:nth-child(3){background:var(--fn);animation-delay:1.2s}
+.hero-matrix div:nth-child(4){background:var(--tn);animation-delay:1.8s}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media(max-width:880px){.hero-matrix{display:none}}
+
+/* ===== generic section ===== */
+section.chapter{padding:9vh 0;position:relative}
+.kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--tp);margin-bottom:18px}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,5vw,3.4rem);line-height:1.02;
+  letter-spacing:-.015em;max-width:18ch;margin-bottom:24px}
+h2 em{font-style:italic;color:var(--tp)}
+.lede{font-size:1.18rem;color:var(--ink-soft);max-width:60ch}
+.lede + .lede{margin-top:18px}
+p.body{max-width:62ch;color:var(--ink-soft);margin-top:18px}
+.divider{height:1px;background:var(--line);max-width:var(--maxw);margin:0 auto}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}.reveal.d4{transition-delay:.4s}
+
+/* ===== confusion matrix interactive ===== */
+.cm-stage{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;margin-top:48px}
+@media(max-width:880px){.cm-stage{grid-template-columns:1fr;gap:36px}}
+.cm{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;aspect-ratio:1/1;max-width:420px;width:100%}
+.cell{border-radius:14px;padding:20px;color:#fff;cursor:pointer;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between;min-height:150px;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.cell:hover,.cell.active{transform:translateY(-6px) scale(1.02);box-shadow:0 18px 40px rgba(0,0,0,.18)}
+.cell .abbr{font-family:var(--mono);font-size:2.4rem;font-weight:600;letter-spacing:.02em}
+.cell .name{font-family:var(--serif);font-size:1.05rem;line-height:1.15;opacity:.95}
+.cell.tp{background:var(--tp)}.cell.fp{background:var(--fp)}
+.cell.fn{background:var(--fn)}.cell.tn{background:var(--tn)}
+.cm-readout{min-height:200px}
+.cm-readout .rh{font-family:var(--serif);font-size:1.7rem;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.cm-readout .swatch{width:18px;height:18px;border-radius:5px;display:inline-block}
+.cm-readout p{color:var(--ink-soft);font-size:1.05rem;max-width:46ch}
+.cm-hint{font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);letter-spacing:.08em;margin-top:18px}
+.axis-note{font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.18em}
+
+/* ===== metric anatomy ===== */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:46px}
+.metric-card{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:24px;
+  transition:transform .3s,border-color .3s}
+.metric-card:hover{transform:translateY(-4px);border-color:var(--ink-faint)}
+.metric-card h3{font-family:var(--serif);font-size:1.4rem;font-weight:600;margin-bottom:6px}
+.metric-card .formula{font-family:var(--mono);font-size:.95rem;color:var(--ink);background:var(--paper);
+  border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:12px 0;display:inline-block}
+.metric-card .desc{font-size:.92rem;color:var(--ink-soft)}
+.chips{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:.7rem;font-weight:600;color:#fff;padding:3px 9px;border-radius:6px}
+.chip.tp{background:var(--tp)}.chip.fp{background:var(--fp)}.chip.fn{background:var(--fn)}.chip.tn{background:var(--tn)}
+
+/* ===== scrolly module (sticky + steps) ===== */
+.scrolly{position:relative;display:grid;grid-template-columns:42% 58%;gap:0;max-width:var(--maxw);margin:0 auto}
+@media(max-width:880px){.scrolly{grid-template-columns:1fr}}
+.scrolly .steps{padding:30vh 0 30vh}
+.step{min-height:62vh;display:flex;align-items:center;padding:24px 40px 24px 0;opacity:.32;transition:opacity .4s}
+.step.active{opacity:1}
+.step .stepnum{font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;color:var(--tp);margin-bottom:12px}
+.step h3{font-family:var(--serif);font-size:1.7rem;font-weight:600;line-height:1.12;margin-bottom:12px}
+.step p{color:var(--ink-soft);font-size:1.02rem}
+.step .big{font-family:var(--serif);font-size:clamp(2.4rem,5vw,3.6rem);font-weight:600;color:var(--ink);line-height:1;display:block;margin-bottom:6px}
+.sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+@media(max-width:880px){.sticky{height:60vh;top:20vh}.step{min-height:auto;padding:40px 0}}
+.sticky-inner{width:100%;max-width:560px}
+
+/* bar chart */
+.bars{display:flex;flex-direction:column;gap:11px}
+.bar-row{display:grid;grid-template-columns:120px 1fr 46px;align-items:center;gap:14px}
+.bar-row .lbl{font-family:var(--mono);font-size:.78rem;text-align:right;color:var(--ink-soft)}
+.bar-track{height:26px;background:var(--paper-2);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:6px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.bar-row .val{font-family:var(--mono);font-size:.82rem;font-weight:600;color:var(--ink)}
+.chart-title{font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:22px}
+
+/* line chart (over time) */
+.linechart{width:100%;height:auto}
+.linechart .axis{stroke:var(--line);stroke-width:1}
+.linechart .grid{stroke:var(--line);stroke-width:1;stroke-dasharray:3 4;opacity:.6}
+.linechart .lbl{font-family:var(--mono);font-size:11px;fill:var(--ink-faint)}
+.linechart .pt-val{font-family:var(--mono);font-size:13px;font-weight:600;fill:var(--ink)}
+.linechart .line-path{fill:none;stroke:var(--tp);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.linechart .area{fill:var(--tp);opacity:.08}
+.linechart circle{fill:var(--tp);stroke:var(--paper);stroke-width:3}
+
+/* donut */
+.donut-wrap{display:flex;align-items:center;gap:34px;flex-wrap:wrap;justify-content:center}
+.legend{display:flex;flex-direction:column;gap:14px}
+.legend-item{display:flex;align-items:flex-start;gap:12px;max-width:30ch}
+.legend-item .sw{width:16px;height:16px;border-radius:5px;margin-top:4px;flex:none}
+.legend-item .lt{font-family:var(--serif);font-weight:600;font-size:1.1rem}
+.legend-item .ld{font-size:.86rem;color:var(--ink-soft)}
+.legend-item .pct{font-family:var(--mono);font-weight:600;color:var(--ink)}
+
+/* stat band */
+.statband{background:var(--ink);color:var(--paper);padding:11vh 0}
+.statband .kicker{color:var(--fp)}
+.statband h2{color:var(--paper)}
+.statband .lede{color:#cfc7b8}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:36px;margin-top:50px}
+.stat .num{font-family:var(--serif);font-size:clamp(3rem,7vw,5rem);font-weight:600;line-height:1;
+  background:linear-gradient(120deg,var(--tp),var(--fp));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat.alt .num{background:linear-gradient(120deg,var(--tn),#7fd4b8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .cap{margin-top:10px;color:#cfc7b8;font-size:.98rem;max-width:30ch}
+
+/* axis fragmentation viz */
+.axisviz{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:42px}
+@media(max-width:680px){.axisviz{grid-template-columns:1fr}}
+.axisviz .card{border:1px solid var(--line);border-radius:14px;padding:24px;text-align:center;background:var(--paper-2)}
+.axisviz .card .n{font-family:var(--serif);font-size:3rem;font-weight:600}
+.axisviz .card .of{font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);letter-spacing:.1em}
+.axisviz .card .what{margin-top:10px;color:var(--ink-soft);font-size:.95rem}
+.axisviz .card.warn{border-color:var(--fn);border-width:2px}
+.axisviz .card.warn .n{color:var(--fn)}
+.axisviz .card{cursor:pointer;transition:transform .3s,border-color .3s,box-shadow .3s}
+.axisviz .card:hover{transform:translateY(-4px)}
+.axisviz .card.sel{box-shadow:0 0 0 2px var(--ink) inset}
+.axisviz .card.warn.sel{box-shadow:0 0 0 2px var(--fn) inset}
+.axisviz .card .pick{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;color:var(--ink-faint);margin-top:12px;text-transform:uppercase}
+
+/* axis demonstrator */
+.axis-demo{margin-top:38px;border:1px solid var(--line);border-radius:18px;padding:30px;background:var(--paper-2)}
+.axis-switch{display:inline-flex;background:var(--paper);border:1px solid var(--line);border-radius:30px;padding:5px;gap:4px;flex-wrap:wrap}
+.axis-btn{font-family:var(--mono);font-size:.76rem;letter-spacing:.03em;border:none;background:transparent;color:var(--ink-soft);
+  padding:9px 16px;border-radius:24px;cursor:pointer;transition:all .25s;white-space:nowrap}
+.axis-btn:hover{color:var(--ink)}
+.axis-btn.active{background:var(--ink);color:var(--paper)}
+.axis-demo-body{display:grid;grid-template-columns:auto 1fr;gap:46px;align-items:center;margin-top:30px}
+@media(max-width:760px){.axis-demo-body{grid-template-columns:1fr;gap:30px;justify-items:center}}
+.cmx{display:inline-block}
+.cmx-top{display:flex;flex-direction:column;align-items:center;gap:8px}
+.cmx-row{display:flex;align-items:stretch;gap:10px}
+.cmx-grid{display:inline-grid;gap:5px}
+.cmx-cell{width:52px;height:52px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.8rem;font-weight:500;transition:background .45s,color .45s}
+.cmx-corner{width:auto}
+.cmx-clabel{font-family:var(--mono);font-size:.66rem;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;text-align:center}
+.cmx-rlabel{font-family:var(--mono);font-size:.66rem;color:var(--ink-soft);display:flex;align-items:center;justify-content:flex-end;padding-right:4px;min-width:46px}
+.cmx-axis{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tp);font-weight:600}
+.cmx-axis.muted{color:var(--ink-faint)}
+.cmx-axis.ghost{color:var(--fn)}
+.cmx-vaxis{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center}
+.cmx-title{font-family:var(--serif);font-size:1.5rem;font-weight:600;margin-bottom:10px}
+.cmx-desc{color:var(--ink-soft);font-size:1rem;max-width:44ch}
+.cmx-src{font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin-top:18px;line-height:1.7;
+  border-left:2px solid var(--line);padding-left:14px}
+
+/* call to action / conclusion */
+.cta{text-align:center;padding:14vh 0}
+.cta h2{margin:0 auto 24px;max-width:22ch}
+.cta .lede{margin:0 auto}
+.cta-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:42px}
+.cta-tags span{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);border-radius:30px;
+  padding:8px 18px;color:var(--ink-soft)}
+
+/* footer / citation */
+footer{background:var(--paper-2);border-top:1px solid var(--line);padding:60px 0 70px}
+.cite{font-family:var(--mono);font-size:.86rem;color:var(--ink-soft);max-width:70ch;line-height:1.8}
+.cite .src{color:var(--ink);font-weight:600}
+.foot-meta{margin-top:26px;font-size:.82rem;color:var(--ink-faint)}
+.venues{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);font-size:.8rem;color:var(--ink-soft)}
+.venues b{color:var(--tp)}
+
+::selection{background:var(--tp);color:#fff}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="grid-bg"></div>
+  <div class="hero-matrix">
+    <div>TP</div><div>FP</div><div>FN</div><div>TN</div>
+  </div>
+  <div class="hero-inner">
+    <div class="eyebrow">
+      <span class="dot" style="background:var(--tp)"></span>
+      A survey, retold by scroll
+    </div>
+    <h1 class="title">Clarity from <em>Confusion</em></h1>
+    <p class="subtitle">How the visualization community draws machine-learning error &amp; accuracy — and why nobody draws it the same way twice.</p>
+    <p class="byline">Based on the survey by <strong>Shani Spivak, Mackenzie Creamer, Melanie Tory &amp; Michelle A. Borkin</strong> — Khoury College of Computer Sciences, Northeastern University. A reading of <strong>68 papers</strong> across IEEE&nbsp;TVCG, ACM&nbsp;CHI, and ACM&nbsp;IUI (2019–2023).</p>
+  </div>
+  <div class="scroll-cue"><span>scroll</span><span class="bar"></span></div>
+</header>
+
+<!-- ============ CH.1 — THE FOUR CELLS ============ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker">01 — The atom of error</div></div>
+    <h2 class="reveal d1">It all reduces to <em>four cells</em>.</h2>
+    <p class="lede reveal d2">Almost every performance number a model reports is built from the same quartet of outcomes — the contents of a <strong>confusion matrix</strong>. Tap a cell to see what it means and why the difference between them is rarely symmetric.</p>
+
+    <div class="cm-stage">
+      <div class="cm reveal d2">
+        <div class="cell tp active" data-cell="tp"><span class="abbr">TP</span><span class="name">True Positive</span></div>
+        <div class="cell fp" data-cell="fp"><span class="abbr">FP</span><span class="name">False Positive</span></div>
+        <div class="cell fn" data-cell="fn"><span class="abbr">FN</span><span class="name">False Negative</span></div>
+        <div class="cell tn" data-cell="tn"><span class="abbr">TN</span><span class="name">True Negative</span></div>
+      </div>
+      <div class="cm-readout reveal d3" id="cmReadout">
+        <div class="rh"><span class="swatch" style="background:var(--tp)"></span>True Positive</div>
+        <p id="cmText">The model says <em>positive</em>, and it's right. The hits — the cases we hoped to catch and did.</p>
+        <div class="cm-hint">▸ click any cell — these four are the only values that vary independently</div>
+      </div>
+    </div>
+    <p class="body reveal">Not all of these errors weigh the same. In cancer screening, a <strong style="color:var(--fn)">false negative</strong> can mean a missed diagnosis and lost treatment time; a <strong style="color:var(--fp)">false positive</strong> causes stress and extra tests, but usually resolves once the mistake surfaces. The matrix is the one common view that keeps those two failure modes <em>visibly distinct</em>.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ CH.2 — METRIC ANATOMY ============ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker">02 — Same ingredients, different recipes</div></div>
+    <h2 class="reveal d1">Every metric is those four cells, <em>rearranged</em>.</h2>
+    <p class="lede reveal d2">The most-reported metrics in the survey aren't independent — they're different ratios of TP, FP, FN and TN. Which is exactly why two papers can describe "performance" and never be comparing the same thing.</p>
+
+    <div class="metrics-grid">
+      <div class="metric-card reveal d1">
+        <h3>Accuracy</h3>
+        <div class="formula">(TP+TN) / total</div>
+        <div class="desc">Share of all predictions that are correct. Says nothing about <em>which</em> errors happened.</div>
+        <div class="chips"><span class="chip tp">TP</span><span class="chip tn">TN</span><span class="chip fp">FP</span><span class="chip fn">FN</span></div>
+      </div>
+      <div class="metric-card reveal d2">
+        <h3>Precision</h3>
+        <div class="formula">TP / (TP+FP)</div>
+        <div class="desc">Of everything flagged positive, how much really was. Punishes false alarms.</div>
+        <div class="chips"><span class="chip tp">TP</span><span class="chip fp">FP</span></div>
+      </div>
+      <div class="metric-card reveal d3">
+        <h3>Recall <span style="font-size:.8rem;color:var(--ink-faint)">/ sensitivity</span></h3>
+        <div class="formula">TP / (TP+FN)</div>
+        <div class="desc">Of everything that truly was positive, how much we caught. Punishes misses.</div>
+        <div class="chips"><span class="chip tp">TP</span><span class="chip fn">FN</span></div>
+      </div>
+      <div class="metric-card reveal d1">
+        <h3>Specificity</h3>
+        <div class="formula">TN / (FP+TN)</div>
+        <div class="desc">Of everything truly negative, how much we correctly left alone.</div>
+        <div class="chips"><span class="chip tn">TN</span><span class="chip fp">FP</span></div>
+      </div>
+      <div class="metric-card reveal d2">
+        <h3>F1 Score</h3>
+        <div class="formula">2TP / (2TP+FP+FN)</div>
+        <div class="desc">Harmonic mean of precision &amp; recall. Its non-linear pull on TP lets you weight costly mistakes.</div>
+        <div class="chips"><span class="chip tp">TP</span><span class="chip fp">FP</span><span class="chip fn">FN</span></div>
+      </div>
+      <div class="metric-card reveal d3" style="background:var(--ink);color:var(--paper);border-color:var(--ink)">
+        <h3 style="color:var(--paper)">ROC / AUC</h3>
+        <div class="formula" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:var(--paper)">TPR vs FPR</div>
+        <div class="desc" style="color:#cfc7b8">Trades sensitivity against 1−specificity across thresholds. Area under the curve = how well classes separate.</div>
+        <div class="chips"><span class="chip tp">TP</span><span class="chip fn">FN</span><span class="chip fp">FP</span><span class="chip tn">TN</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ CH.3 — SCROLLY: WHAT THE COMMUNITY ACTUALLY DRAWS ============ -->
+<section class="chapter" style="padding-bottom:0">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker">03 — What the field actually reaches for</div></div>
+    <h2 class="reveal d1">Across <em>490</em> charts, simple wins.</h2>
+    <p class="lede reveal d2">The authors coded every error-and-accuracy figure in all 68 papers. The result is a clear hierarchy — and a quiet irony hiding inside it.</p>
+  </div>
+
+  <div class="scrolly" id="scrolly1">
+    <div class="steps">
+      <div class="step active" data-step="0">
+        <div>
+          <div class="stepnum">Step 01 / Frequency</div>
+          <span class="big">108</span>
+          <h3>Tables lead — by a lot.</h3>
+          <p>The single most common way to communicate model performance isn't a chart at all. It's a table. Plain numbers, dropped into a grid.</p>
+        </div>
+      </div>
+      <div class="step" data-step="1">
+        <div>
+          <div class="stepnum">Step 02 / Frequency</div>
+          <span class="big">72</span>
+          <h3>Then comes plain text.</h3>
+          <p>Second place goes to performance reported inside the prose of the paper. Visual encoding often simply isn't the priority — which makes cross-paper comparison harder.</p>
+        </div>
+      </div>
+      <div class="step" data-step="2">
+        <div>
+          <div class="stepnum">Step 03 / Frequency</div>
+          <span class="big">67 · 46</span>
+          <h3>Line &amp; bar charts: the familiar workhorses.</h3>
+          <p>When authors do reach for a chart, they reach for the ones everyone already reads — lines for accuracy over epochs, bars for model-to-model comparison.</p>
+        </div>
+      </div>
+      <div class="step" data-step="3">
+        <div>
+          <div class="stepnum">Step 04 / The irony</div>
+          <span class="big">59</span>
+          <h3>The richest view is the rarest of the common five.</h3>
+          <p>Heatmaps — almost always confusion matrices — are the <em>only</em> view that keeps false positives and false negatives distinct. Yet they trail the simpler formats. The most informative encoding is also the least familiar one.</p>
+        </div>
+      </div>
+    </div>
+    <div class="sticky">
+      <div class="sticky-inner">
+        <div class="chart-title">Error &amp; accuracy figures, by encoding (n = 490)</div>
+        <div class="bars" id="bars1">
+          <div class="bar-row"><span class="lbl">Table</span><div class="bar-track"><div class="bar-fill" data-w="100" data-c="tn" style="background:var(--tn)"></div></div><span class="val">108</span></div>
+          <div class="bar-row"><span class="lbl">Text</span><div class="bar-track"><div class="bar-fill" data-w="67" data-c="fn" style="background:var(--ink-faint)"></div></div><span class="val">72</span></div>
+          <div class="bar-row"><span class="lbl">Line graph</span><div class="bar-track"><div class="bar-fill" data-w="62" style="background:var(--fp)"></div></div><span class="val">67</span></div>
+          <div class="bar-row"><span class="lbl">Heatmap</span><div class="bar-track"><div class="bar-fill" data-w="55" style="background:var(--tp)"></div></div><span class="val">59</span></div>
+          <div class="bar-row"><span class="lbl">Bar chart</span><div class="bar-track"><div class="bar-fill" data-w="43" style="background:var(--fp)"></div></div><span class="val">46</span></div>
+          <div class="bar-row"><span class="lbl">Text-in-figure</span><div class="bar-track"><div class="bar-fill" data-w="23" style="background:var(--ink-faint)"></div></div><span class="val">25</span></div>
+          <div class="bar-row"><span class="lbl">Combination</span><div class="bar-track"><div class="bar-fill" data-w="21" style="background:var(--ink-faint)"></div></div><span class="val">23</span></div>
+          <div class="bar-row"><span class="lbl">Scatterplot</span><div class="bar-track"><div class="bar-fill" data-w="16" style="background:var(--ink-faint)"></div></div><span class="val">17</span></div>
+          <div class="bar-row"><span class="lbl">Box &amp; whisker</span><div class="bar-track"><div class="bar-fill" data-w="15" style="background:var(--ink-faint)"></div></div><span class="val">16</span></div>
+          <div class="bar-row"><span class="lbl">Bullet graph</span><div class="bar-track"><div class="bar-fill" data-w="10" style="background:var(--ink-faint)"></div></div><span class="val">11</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CH.4 — DONUT: ACCURACY VS CONFUSION ============ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker">04 — Which metric carries the story</div></div>
+    <h2 class="reveal d1">Two metrics do most of the talking.</h2>
+    <p class="lede reveal d2">Of every metric presented across the corpus, accuracy and the confusion-matrix metrics together account for more than half — but accuracy, the one that hides which error occurred, leads.</p>
+
+    <div class="donut-wrap reveal d2" style="margin-top:50px">
+      <svg width="300" height="300" viewBox="0 0 300 300" id="donut" aria-label="Metric share donut chart">
+        <circle cx="150" cy="150" r="110" fill="none" stroke="var(--paper-2)" stroke-width="40"/>
+        <circle class="seg" id="seg-acc" cx="150" cy="150" r="110" fill="none" stroke="var(--tp)" stroke-width="40"
+          stroke-dasharray="0 999" transform="rotate(-90 150 150)" stroke-linecap="butt"/>
+        <circle class="seg" id="seg-cm" cx="150" cy="150" r="110" fill="none" stroke="var(--fp)" stroke-width="40"
+          stroke-dasharray="0 999" transform="rotate(-90 150 150)" stroke-linecap="butt"/>
+        <text x="150" y="142" text-anchor="middle" style="font-family:var(--serif);font-size:38px;font-weight:600;fill:var(--ink)">54.8%</text>
+        <text x="150" y="170" text-anchor="middle" style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;fill:var(--ink-faint)">FROM JUST TWO</text>
+      </svg>
+      <div class="legend">
+        <div class="legend-item"><span class="sw" style="background:var(--tp)"></span><div><span class="lt">Accuracy — <span class="pct">35.3%</span></span><div class="ld">The plurality. Correct ÷ total, blind to which error happened.</div></div></div>
+        <div class="legend-item"><span class="sw" style="background:var(--fp)"></span><div><span class="lt">Confusion metrics — <span class="pct">19.5%</span></span><div class="ld">Second most common. The only family that breaks errors apart.</div></div></div>
+        <div class="legend-item"><span class="sw" style="background:var(--paper-2);border:1px solid var(--line)"></span><div><span class="lt">Everything else — <span class="pct">45.2%</span></span><div class="ld">Precision, recall, F1, AUC, and dozens of one-off measures.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ CH.5 — LINE: OVER TIME ============ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker">05 — A field still finding its footing</div></div>
+    <h2 class="reveal d1">Performance figures surged — then dipped.</h2>
+    <p class="lede reveal d2">Error-and-accuracy visualizations climbed steadily and peaked in 2022 before falling off the following year. And the long tail keeps growing: of 25 distinct chart types observed, a third appeared in only a single year.</p>
+
+    <div class="reveal d2" style="margin-top:46px;max-width:760px">
+      <div class="chart-title">Count of error &amp; accuracy visualizations per year</div>
+      <svg class="linechart" viewBox="0 0 760 360" id="lineChart" aria-label="Visualizations per year line chart">
+        <!-- gridlines -->
+        <line class="grid" x1="60" y1="40"  x2="730" y2="40"/>
+        <line class="grid" x1="60" y1="110" x2="730" y2="110"/>
+        <line class="grid" x1="60" y1="180" x2="730" y2="180"/>
+        <line class="grid" x1="60" y1="250" x2="730" y2="250"/>
+        <!-- axes -->
+        <line class="axis" x1="60" y1="300" x2="730" y2="300"/>
+        <!-- y labels -->
+        <text class="lbl" x="48" y="44"  text-anchor="end">180</text>
+        <text class="lbl" x="48" y="114" text-anchor="end">120</text>
+        <text class="lbl" x="48" y="184" text-anchor="end">60</text>
+        <text class="lbl" x="48" y="254" text-anchor="end">0</text>
+        <!-- data: 2019=36,2020=56,2021=105,2022=178,2023=97  | y = 300 - val*(260/180) -->
+        <polygon class="area" id="lineArea" points="" />
+        <polyline class="line-path" id="linePath" points="" />
+        <g id="linePts"></g>
+        <!-- x labels -->
+        <text class="lbl" x="60"  y="322" text-anchor="middle">2019</text>
+        <text class="lbl" x="227" y="322" text-anchor="middle">2020</text>
+        <text class="lbl" x="395" y="322" text-anchor="middle">2021</text>
+        <text class="lbl" x="562" y="322" text-anchor="middle">2022</text>
+        <text class="lbl" x="730" y="322" text-anchor="middle">2023</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CH.6 — STAT BAND: FRAGMENTATION ============ -->
+<section class="chapter statband">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker">06 — The cost of creativity</div></div>
+    <h2 class="reveal d1">Novelty is everywhere. <em style="color:var(--fp)">Comparability isn't.</em></h2>
+    <p class="lede reveal d2">Creative exploration is a strength of the visualization community — but when every team encodes performance differently, comparing two models becomes its own research problem.</p>
+
+    <div class="stat-row">
+      <div class="stat reveal d1"><div class="num" data-count="68">0</div><div class="cap">papers surveyed across three premier venues, 2019–2023.</div></div>
+      <div class="stat reveal d2"><div class="num" data-count="63">0</div><div class="cap">distinct naming variations counted for the F1 score alone, in related work by Blagec et al.</div></div>
+      <div class="stat alt reveal d3"><div class="num" data-count="490">0</div><div class="cap">unique error-and-accuracy representations coded, channel by channel.</div></div>
+      <div class="stat alt reveal d4"><div class="num" data-count="40">0</div><div class="cap">of the 68 papers include a full confusion matrix — the richest shared view.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CH.7 — AXIS INCONSISTENCY ============ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker">07 — Even the matrix can't agree with itself</div></div>
+    <h2 class="reveal d1">Same chart. <em>Three different layouts.</em></h2>
+    <p class="lede reveal d2">Among the 40 papers using full confusion matrices, there was no shared convention for which axis holds the ground truth — and a striking share labeled no axis at all. Two papers even switched conventions <em>within the same paper</em>.</p>
+
+    <div class="axisviz">
+      <div class="card sel reveal d1" data-mode="y"><div class="n">26</div><div class="of">PAPERS</div><div class="what">put <strong>ground truth on the y-axis</strong> — the rough majority.</div><div class="pick">▸ preview</div></div>
+      <div class="card reveal d2" data-mode="x"><div class="n">3</div><div class="of">PAPERS</div><div class="what">flipped it, putting <strong>ground truth on the x-axis</strong>.</div><div class="pick">▸ preview</div></div>
+      <div class="card warn reveal d3" data-mode="none"><div class="n">13</div><div class="of">PAPERS</div><div class="what">provided <strong>no axis labels at all</strong> — leaving readers to guess.</div><div class="pick">▸ preview</div></div>
+    </div>
+
+    <div class="axis-demo">
+      <div class="axis-switch" role="tablist" aria-label="Confusion matrix orientation">
+        <button class="axis-btn active" data-mode="y">Ground truth · y-axis</button>
+        <button class="axis-btn" data-mode="x">Ground truth · x-axis</button>
+        <button class="axis-btn" data-mode="none">No axis labels</button>
+      </div>
+      <div class="axis-demo-body">
+        <div class="cmx" id="cmxRender"></div>
+        <div class="cmx-meta">
+          <div class="cmx-title" id="cmxTitle"></div>
+          <p class="cmx-desc" id="cmxDesc"></p>
+          <div class="cmx-src" id="cmxSrc"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="body reveal" style="margin-top:32px">All three panels above are real confusion matrices pulled from the surveyed corpus — yet a reader fluent in the format still has to re-orient at nearly every figure. Multiply that friction across a literature, and the promise of a "standard" diagnostic view quietly erodes.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ CH.8 — CHANNELS ============ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker">08 — How the marks are made</div></div>
+    <h2 class="reveal d1">Two perceptual channels do the heavy lifting.</h2>
+    <p class="lede reveal d2">Coding each figure against Munzner's channel rankings, the authors found authors gravitate toward a small set of encodings — position and spatial region above all.</p>
+
+    <div class="bars reveal d2" style="margin-top:44px;max-width:680px">
+      <div class="chart-title">Dominant visual channels (of 296 encodings)</div>
+      <div class="bar-row"><span class="lbl">Position</span><div class="bar-track"><div class="bar-fill chan" data-w="100" style="background:var(--tn)"></div></div><span class="val">197</span></div>
+      <div class="bar-row"><span class="lbl">Spatial region</span><div class="bar-track"><div class="bar-fill chan" data-w="86" style="background:var(--tp)"></div></div><span class="val">170</span></div>
+      <div class="bar-row"><span class="lbl">Position ∩ region</span><div class="bar-track"><div class="bar-fill chan" data-w="52" style="background:var(--fp)"></div></div><span class="val">103</span></div>
+    </div>
+    <p class="body reveal" style="margin-top:30px">Position on a common scale — the most accurately read channel there is — anchors most charts. Spatial region powers the heatmap. Where they combine, you get the confusion matrix: efficient for many classes, but trading away that high-accuracy position channel to do it.</p>
+  </div>
+</section>
+
+<!-- ============ CH.9 — CTA / CONCLUSION ============ -->
+<section class="chapter cta">
+  <div class="wrap">
+    <div class="reveal"><div class="kicker" style="display:inline-block">09 — The call</div></div>
+    <h2 class="reveal d1">Keep the <em>creativity</em>. Build in the <em>comparability</em>.</h2>
+    <p class="lede reveal d2">The survey isn't a critique of inventive design — it's a plea to pair it with shared conventions, so stakeholders can actually weigh one model's risks against another's. As models reach higher-stakes domains, abstracting error types away for a single tidy accuracy number carries real human cost.</p>
+    <div class="cta-tags reveal d3">
+      <span>design studies</span><span>shared frameworks</span><span>error-type fidelity</span><span>local + global explainability</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER / CITATION ============ -->
+<footer>
+  <div class="wrap">
+    <div class="tag" style="margin-bottom:16px">Source paper</div>
+    <p class="cite"><span class="src">S. Spivak, M. Creamer, M. Tory, and M. A. Borkin.</span> "Clarity from Confusion: A Survey of Design Choices for Machine Learning Performance Visualization." <em>IEEE Transactions on Visualization and Computer Graphics</em>, 2024. Khoury College of Computer Sciences, Northeastern University.</p>
+    <div class="venues">
+      Surveyed venues: <span><b>40</b> IEEE&nbsp;TVCG</span><span><b>20</b> ACM&nbsp;IUI</span><span><b>8</b> ACM&nbsp;SIGCHI</span>
+    </div>
+    <p class="foot-meta">This page is an independent, interactive retelling of the survey's findings for educational use. All figures and statistics are drawn from the paper. Built as a static site — no tracking, no dependencies beyond web fonts.</p>
+  </div>
+</footer>
+
+<script>
+/* ---------- progress bar ---------- */
+const prog = document.getElementById('progress');
+function onScroll(){
+  const h = document.documentElement;
+  const max = h.scrollHeight - h.clientHeight;
+  prog.style.width = (max>0 ? (h.scrollTop/max*100) : 0) + '%';
+}
+document.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+/* ---------- reveal on scroll ---------- */
+const revObs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revObs.unobserve(e.target);} });
+},{threshold:.18});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+/* ---------- confusion matrix interaction ---------- */
+const cmData = {
+  tp:{c:'--tp',t:'True Positive',d:'The model says <em>positive</em>, and it\'s right. The hits — the cases we hoped to catch and did.'},
+  fp:{c:'--fp',t:'False Positive',d:'The model says <em>positive</em>, but it\'s wrong. A false alarm — costs time and stress, usually recoverable.'},
+  fn:{c:'--fn',t:'False Negative',d:'The model says <em>negative</em>, but it\'s wrong. A miss — the failure mode that, in screening, can be the most dangerous.'},
+  tn:{c:'--tn',t:'True Negative',d:'The model says <em>negative</em>, and it\'s right. Correctly leaving the unaffected alone.'}
+};
+const cells = document.querySelectorAll('.cell');
+const rh = document.querySelector('#cmReadout .rh');
+const sw = document.querySelector('#cmReadout .swatch');
+const txt = document.getElementById('cmText');
+cells.forEach(cell=>{
+  cell.addEventListener('click',()=>{
+    cells.forEach(c=>c.classList.remove('active'));
+    cell.classList.add('active');
+    const k = cell.dataset.cell, d = cmData[k];
+    rh.innerHTML = '<span class="swatch" style="background:var('+d.c+')"></span>'+d.t;
+    txt.innerHTML = d.d;
+  });
+});
+
+/* ---------- scrolly bar chart (step driven) ---------- */
+const bars1 = document.getElementById('bars1');
+function fillBars(container){
+  container.querySelectorAll('.bar-fill').forEach(b=>{ b.style.width = b.dataset.w + '%'; });
+}
+const steps = document.querySelectorAll('#scrolly1 .step');
+const stepObs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      steps.forEach(s=>s.classList.remove('active'));
+      e.target.classList.add('active');
+      fillBars(bars1); // animate once visible
+    }
+  });
+},{threshold:.55});
+steps.forEach(s=>stepObs.observe(s));
+/* also fill if the chart scrolls into view directly */
+const bars1Obs = new IntersectionObserver((en)=>{ en.forEach(e=>{ if(e.isIntersecting){ fillBars(bars1); bars1Obs.disconnect(); }});},{threshold:.3});
+bars1Obs.observe(bars1);
+
+/* ---------- channel bars ---------- */
+const chanObs = new IntersectionObserver((en)=>{
+  en.forEach(e=>{ if(e.isIntersecting){ document.querySelectorAll('.chan').forEach(b=>b.style.width=b.dataset.w+'%'); chanObs.disconnect(); }});
+},{threshold:.4});
+const firstChan = document.querySelector('.chan');
+if(firstChan) chanObs.observe(firstChan);
+
+/* ---------- donut ---------- */
+const R=110, C=2*Math.PI*R;
+const segAcc=document.getElementById('seg-acc'), segCm=document.getElementById('seg-cm');
+function drawDonut(){
+  const acc=35.3/100, cm=19.5/100;
+  const lenAcc=C*acc, lenCm=C*cm;
+  segAcc.style.transition='stroke-dasharray 1.1s cubic-bezier(.2,.8,.2,1)';
+  segCm.style.transition='stroke-dasharray 1.1s cubic-bezier(.2,.8,.2,1) .25s';
+  segAcc.setAttribute('stroke-dasharray', lenAcc+' '+(C-lenAcc));
+  // cm starts where acc ends -> use dashoffset
+  segCm.setAttribute('stroke-dasharray', lenCm+' '+(C-lenCm));
+  segCm.setAttribute('stroke-dashoffset', -lenAcc);
+}
+const donutObs=new IntersectionObserver((en)=>{en.forEach(e=>{if(e.isIntersecting){drawDonut();donutObs.disconnect();}});},{threshold:.4});
+donutObs.observe(document.getElementById('donut'));
+
+/* ---------- line chart ---------- */
+(function(){
+  const data=[{x:60,v:36},{x:227,v:56},{x:395,v:105},{x:562,v:178},{x:730,v:97}];
+  const y=v=>300 - v*(260/180);
+  const pts=data.map(d=>d.x+','+y(d.v)).join(' ');
+  document.getElementById('linePath').setAttribute('points',pts);
+  document.getElementById('lineArea').setAttribute('points','60,300 '+pts+' 730,300');
+  const g=document.getElementById('linePts');
+  data.forEach(d=>{
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',d.x);c.setAttribute('cy',y(d.v));c.setAttribute('r',6);
+    g.appendChild(c);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('class','pt-val');t.setAttribute('x',d.x);t.setAttribute('y',y(d.v)-16);
+    t.setAttribute('text-anchor','middle');t.textContent=d.v;
+    g.appendChild(t);
+  });
+  // draw-on animation
+  const path=document.getElementById('linePath');
+  const len=path.getTotalLength();
+  path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
+  const area=document.getElementById('lineArea');area.style.opacity=0;
+  g.style.opacity=0;
+  const lc=document.getElementById('lineChart');
+  const lcObs=new IntersectionObserver((en)=>{en.forEach(e=>{if(e.isIntersecting){
+    path.style.transition='stroke-dashoffset 1.6s ease';path.style.strokeDashoffset=0;
+    area.style.transition='opacity 1s ease .6s';area.style.opacity=1;
+    g.style.transition='opacity .8s ease 1s';g.style.opacity=1;
+    lcObs.disconnect();
+  }});},{threshold:.4});
+  lcObs.observe(lc);
+})();
+
+/* ---------- count-up stats ---------- */
+function countUp(el,target){
+  const dur=1400, start=performance.now();
+  function tick(now){
+    const p=Math.min((now-start)/dur,1);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent=Math.round(eased*target);
+    if(p<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+const numObs=new IntersectionObserver((en)=>{
+  en.forEach(e=>{ if(e.isIntersecting){ countUp(e.target, +e.target.dataset.count); numObs.unobserve(e.target);} });
+},{threshold:.6});
+document.querySelectorAll('.num[data-count]').forEach(el=>numObs.observe(el));
+
+/* ---------- axis orientation demonstrator (real CMs from the corpus) ---------- */
+const axisData = {
+  y:{
+    title:"Ground truth on the y-axis",
+    desc:"The rough majority convention: rows are the true class, columns are the model's prediction. Read across a row to see how one true class was distributed.",
+    src:"Source · [13] Multi-attention DRNN for nursing action evaluation (Fig. 3a). Rows = Ground Truth, columns = Predictions.",
+    classes:["CS","IS","CT","IT"],
+    rows:[[0.92,0.08,0,0],[0.04,0.92,0,0.04],[0,0,0.83,0.17],[0,0,0,1]],
+    fmt:"dec", labels:true, gt:"y"
+  },
+  x:{
+    title:"Ground truth on the x-axis",
+    desc:"The flipped convention used by only three papers — the transpose of the majority. Here columns are the true class and rows are the prediction. Identical information, mirrored across the diagonal.",
+    src:"Source · [47] Adapting Virtual Embodiment Through Reinforcement Learning (Table 2). Rows = Predicted Class, columns = Actual Class (%).",
+    classes:["Detected","Not det."],
+    rows:[[28.6,14.6],[18.3,39.2]],
+    fmt:"pct", labels:true, gt:"x"
+  },
+  none:{
+    title:"No axis labels at all",
+    desc:"Thirteen papers showed a colored grid with neither axis named. The strong diagonal signals a capable model — but which side is truth and which is prediction? You're left to guess.",
+    src:"Examples · [25] Hand Gesture Recognition · [43] Synthesizing Camera Noise · [30] DeepVID. Bare heatmaps with no axis labels.",
+    classes:["","","","","",""],
+    rows:[[.97,.01,0,.02,0,0],[.02,.94,.03,0,.01,0],[0,.04,.91,.03,.02,0],[.01,0,.05,.92,0,.02],[0,.02,0,.01,.95,.02],[0,0,.01,0,.03,.96]],
+    fmt:"dec", labels:false, gt:"none"
+  }
+};
+function fmtVal(v,fmt){
+  if(fmt==="pct") return v.toFixed(1);
+  if(v===0) return "0";
+  return v.toFixed(2).replace(/0$/,"");
+}
+function renderCM(mode){
+  const d=axisData[mode], n=d.classes.length;
+  const max=Math.max(...d.rows.flat());
+  let grid='<div class="cmx-grid" style="grid-template-columns:'+(d.labels?'46px ':'')+'repeat('+n+',52px)">';
+  // header row: corner + column class labels
+  if(d.labels){
+    grid+='<div class="cmx-corner"></div>';
+    d.classes.forEach(c=>{grid+='<div class="cmx-clabel">'+c+'</div>';});
+  }
+  // data rows
+  d.rows.forEach((row,i)=>{
+    if(d.labels) grid+='<div class="cmx-rlabel">'+d.classes[i]+'</div>';
+    row.forEach(v=>{
+      const a=max>0?v/max:0;
+      const alpha=(0.05+0.92*a).toFixed(3);
+      const col=a>0.5?'#fff':(v===0?'var(--ink-faint)':'var(--ink)');
+      grid+='<div class="cmx-cell" style="background:rgba(214,51,108,'+alpha+');color:'+col+'">'+fmtVal(v,d.fmt)+'</div>';
+    });
+  });
+  grid+='</div>';
+
+  // axis labels
+  const colTxt = d.gt==="none" ? '?' : (d.gt==="x" ? 'Ground truth →' : 'Predicted →');
+  const rowTxt = d.gt==="none" ? '?' : (d.gt==="y" ? 'Ground truth' : 'Predicted');
+  const colCls = d.gt==="none" ? 'ghost' : (d.gt==="x" ? '' : 'muted');
+  const rowCls = d.gt==="none" ? 'ghost' : (d.gt==="y" ? '' : 'muted');
+
+  let html='<div class="cmx-top">';
+  html+='<div class="cmx-axis '+colCls+'">'+colTxt+'</div>';
+  html+='<div class="cmx-row">';
+  html+='<div class="cmx-vaxis cmx-axis '+rowCls+'">'+rowTxt+'</div>';
+  html+=grid;
+  html+='</div></div>';
+
+  document.getElementById('cmxRender').innerHTML=html;
+  document.getElementById('cmxTitle').textContent=d.title;
+  document.getElementById('cmxDesc').textContent=d.desc;
+  document.getElementById('cmxSrc').textContent=d.src;
+}
+function setAxisMode(mode){
+  document.querySelectorAll('.axis-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+  document.querySelectorAll('.axisviz .card').forEach(c=>c.classList.toggle('sel',c.dataset.mode===mode));
+  renderCM(mode);
+}
+document.querySelectorAll('.axis-btn, .axisviz .card').forEach(el=>{
+  el.addEventListener('click',()=>setAxisMode(el.dataset.mode));
+});
+renderCM('y');
+</script>
+</body>
+</html>
