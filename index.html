@@ -811,18 +811,19 @@
   ];
   (function drawFreq(){
     var svg = document.getElementById("chartFreq");
-    var W=720, rowH=20, gap=1.9, padL=118, padR=44, padT=6;
-    var H = padT + FREQ.length*(rowH+gap) + 4;
-    svg.setAttribute("viewBox","0 0 "+W+" "+H);
-    var max = FREQ[0][1];
-    var scale = (W-padL-padR)/max;
-    var ns="http://www.w3.org/2000/svg";
-    function mk(t,a){var e=document.createElementNS(ns,t);for(var k in a)e.setAttribute(k,a[k]);return e;}
-    [0,25,50,75,100].forEach(function(g){
-      var x=padL+g*scale;
-      svg.appendChild(mk("line",{x1:x,y1:padT,x2:x,y2:H-14,class:"grid-line"}));
-      var tx=mk("text",{x:x,y:H-2,"text-anchor":"middle",class:"bar-val"});tx.textContent=g;svg.appendChild(tx);
-    });
+    var W=720, rowH=20, gap=1.9, padL=118, padR=44, padT=6, padB=26;
+var plotB = padT + FREQ.length*(rowH+gap);
+var H = plotB + padB;
+svg.setAttribute("viewBox","0 0 "+W+" "+H);
+var max = FREQ[0][1];
+var scale = (W-padL-padR)/max;
+var ns="http://www.w3.org/2000/svg";
+function mk(t,a){var e=document.createElementNS(ns,t);for(var k in a)e.setAttribute(k,a[k]);return e;}
+[0,25,50,75,100].forEach(function(g){
+  var x=padL+g*scale;
+  svg.appendChild(mk("line",{x1:x,y1:padT,x2:x,y2:plotB+3,class:"grid-line"}));
+  var tx=mk("text",{x:x,y:plotB+17,"text-anchor":"middle",class:"bar-val"});tx.textContent=g;svg.appendChild(tx);
+});
     FREQ.forEach(function(d,i){
       var y=padT+i*(rowH+gap);
       var lab=mk("text",{x:padL-8,y:y+rowH*0.72,"text-anchor":"end",class:"bar-lab"});lab.textContent=d[0];svg.appendChild(lab);
@@ -858,7 +859,7 @@
       var val=mk("text",{x:padL+full+8,y:y+rowH*0.68,class:"bar-val",style:"fill:var(--ink);font-weight:600"});val.textContent=d[1];svg.appendChild(val);
     });
     var capY=padT+AXIS.length*(rowH+gap)+8;
-    var cap=mk("text",{x:padL-12,y:capY,"text-anchor":"end",class:"bar-val"});
+    var cap=mk("text",{x:0,y:capY,"text-anchor":"start",class:"bar-val"});
     cap.textContent="40 papers used full confusion matrices; 13 gave no axis labels.";svg.appendChild(cap);
     srTable("chartAxisData","Which axis was used for ground truth among the 40 papers with full confusion matrices",
       ["Convention","Number of papers"], AXIS.map(function(d){return [d[0],d[1]];}));
