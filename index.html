@@ -594,7 +594,7 @@
 
       <div class="panel">
         <p class="ptitle"><span style="width:10px;height:10px;border-radius:3px;background:var(--gold);display:inline-block"></span>Which axis is “ground truth”?</p>
-        <p class="psub">Among the 40 papers using full confusion matrices (Section&nbsp;V-F).</p>
+        <p class="psub">Among the 40 papers using full confusion matrices, counts of how ground truth was presented.</p>
         <svg id="chartAxis" viewBox="0 0 720 170" aria-hidden="true"></svg>
         <div id="chartAxisData"></div>
       </div>
@@ -860,7 +860,7 @@ function mk(t,a){var e=document.createElementNS(ns,t);for(var k in a)e.setAttrib
     });
     var capY=padT+AXIS.length*(rowH+gap)+8;
     var cap=mk("text",{x:0,y:capY,"text-anchor":"start",class:"bar-val"});
-    cap.textContent="40 papers used full confusion matrices; 13 gave no axis labels.";svg.appendChild(cap);
+    // cap.textContent="40 papers used full confusion matrices; 13 gave no axis labels.";svg.appendChild(cap);
     srTable("chartAxisData","Which axis was used for ground truth among the 40 papers with full confusion matrices",
       ["Convention","Number of papers"], AXIS.map(function(d){return [d[0],d[1]];}));
   })();
