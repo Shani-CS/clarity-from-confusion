@@ -311,9 +311,10 @@
     <span class="eyebrow"><span class="dot"></span>Survey Paper Overview</span>
     <h1>Clarity from&nbsp;Confusion</h1>
     <p class="lede">
-      Every machine-learning performance metric you have ever seen — accuracy, precision, recall, F1 —
-      is built from just <em>four numbers</em>. Move them below and watch each metric recompute live.
-      This page is an interactive walk through the survey of how the visualization community actually draws them.
+      The machine learning performance metrics you ecounter — accuracy, precision, recall, F1 —
+      are built from just <em>four main numbers</em>. Move them below and watch each metric recompute live.
+      Below, we walk through our survey of visualization community machine learning papers exploring
+      how the community approaches presenting these metrics. 
     </p>
 
     <!-- interactive lab -->
@@ -415,9 +416,7 @@
       <a class="chip" id="paper" href="#" target="_blank" rel="noopener" title="Add your paper/DOI link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>
         Read the paper (PDF)</a>
-      <a class="chip" href="https://github.com/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.7.08-.7 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.3 1.19-3.11-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.19a11 11 0 0 1 5.8 0c2.2-1.5 3.17-1.19 3.17-1.19.63 1.59.23 2.76.11 3.05.74.81 1.19 1.85 1.19 3.11 0 4.43-2.7 5.4-5.28 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
-        Source on GitHub</a>
+
       <a class="chip" href="#authors">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
         Authors &amp; citation</a>
@@ -432,17 +431,16 @@
         <p class="kicker">What this is</p>
         <h2 class="h">A field with no shared way to say “here is how the model does.”</h2>
         <p>
-          Machine-learning models increasingly make or shape consequential decisions, so the pictures we use to
-          report their performance matter. Yet across the visualization literature, developers pick different
-          <strong>metrics</strong> and different <strong>chart types</strong> to show essentially the same thing.
-          The survey behind this page reviewed <strong>68 VIS4ML papers</strong> published in IEEE&nbsp;TVCG, ACM&nbsp;CHI,
+          Machine learning models increasingly make or shape consequential decisions, so the way we 
+          report their performance matters. Yet across the visualization literature, many pick different
+          <strong>metrics</strong> and different <strong>chart types</strong> to show essentially the same information in different ways.
+          To explore this design space, we surveyed <strong>68 VIS4ML papers</strong> published in IEEE&nbsp;TVCG, ACM&nbsp;CHI,
           and ACM&nbsp;IUI between 2019 and 2023, coding <strong>490 individual error-and-accuracy representations</strong>
           for what they show and how they show it.
         </p>
         <p>
-          The finding, in short: enormous creativity, very little comparability. This companion lets you feel that
-          tension directly — first by playing with the four numbers every metric shares, then by walking through
-          what the survey actually found.
+          Our findings, in short: enormous creativity, but often at the cost of very comparability. Throughout this page, 
+          we explore that tension directly — by presenting both the breadth and depth of design creativity and the consequences of diverging approaches.
         </p>
       </div>
 
@@ -468,8 +466,8 @@
         <p>
           The confusion matrix is special precisely because it keeps <strong>false positives and false negatives
           separate</strong>. Almost every other metric collapses these four counts into a single number — which is
-          convenient, but throws away the distinction the survey argues matters most. In cancer screening, a false
-          negative is a missed diagnosis; a false positive is an anxious week and an extra test. Those are not the
+          convenient, and supports a certain perspective, but removes the distinction we argue matters in high-risk and human impact settings. 
+          For example, in a cancer screening scenario, a false negative is a missed diagnosis; a false positive is an anxious week and an extra test. Those are not the
           same mistake, yet a lone accuracy score treats them as interchangeable.
         </p>
       </div>
@@ -497,7 +495,7 @@
           Each metric below asks a different question of the confusion matrix. Precision asks “when the model says
           yes, how often is it right?” Recall asks “of the things that were actually yes, how many did we catch?”
           They can pull in opposite directions, which is why F1 — their harmonic mean — is often reported as a single
-          balanced score. Hover the cards, then scrub the sliders above to see each definition move.
+          balanced score. Hover the cards, then move the sliders above to see each definition move.
         </p>
       </div>
 
@@ -524,8 +522,8 @@
         <h2 class="h">The most common “visualization” isn’t a chart at all.</h2>
         <p>
           When the survey tallied every representation, the two most frequent ways to communicate model performance
-          were the plainest possible: a <strong>table</strong> and a <strong>sentence of text</strong>. Purpose-built
-          charts — line graphs, heatmaps, bar charts — came next. The chart below is built from the survey’s real counts.
+          were actually text-based: a <strong>table</strong> and within a <strong>sentence of text</strong>. Purpose-built
+          charts — line graphs, heatmaps, bar charts — came next. The chart below is shows the survey’s counts by presentation format.
         </p>
       </div>
 
@@ -540,7 +538,7 @@
         <p>
           Break the same data out by topic area and the pattern holds: <strong>tables and in-text numbers dominate ML-development
           papers</strong>, while bar charts, heatmaps, and line graphs recur across nearly every domain. Confusion matrices are
-          almost always rendered as heatmaps — a more complex encoding than the bars and lines used for headline accuracy.
+          almost always rendered as heatmaps — a more complex encoding than the bars and lines used for accuracy.
         </p>
       </div>
 
@@ -554,9 +552,9 @@
             <div class="file">assets/figures/fig7-metric-vs-encoding.png</div>
           </div>
         </div>
-        <figcaption><b>Figure 7.</b> Accuracy is most often shown as text, tables, line and bar charts; confusion metrics arrive as heatmaps; precision and recall tend to travel together in tables.</figcaption>
+        <figcaption><b>Figure 7.</b> Accuracy is most often shown as text, tables, line and bar charts; confusion metrics as heatmaps; precision and recall tend to be shown together in tables.</figcaption>
       </figure>
-
+<!-- 
       <div class="prose">
         <h3 class="h">Usage climbed, then dipped</h3>
         <p>
@@ -570,13 +568,13 @@
         <p class="psub">Total error &amp; accuracy visualizations across the corpus, 2019–2023 (Figure 9).</p>
         <svg id="chartTime" viewBox="0 0 720 320" aria-hidden="true"></svg>
         <div id="chartTimeData"></div>
-      </div>
+      </div> -->
 
       <div class="prose">
         <h3 class="h">The comparability problem, in one statistic</h3>
         <p>
-          Forty of the 68 papers included a full confusion matrix — and they could not even agree on which axis is
-          ground truth. This inconsistency, small as it seems, is exactly what makes cross-paper comparison so hard.
+          40 of the 68 papers included a full confusion matrix — though these differed on which axis is used for
+          ground truth. This inconsistency, small as it seems, can make cross-paper comparison difficult.
         </p>
       </div>
 
@@ -597,7 +595,7 @@
             <div class="file">assets/figures/fig12-cm-variations.png</div>
           </div>
         </div>
-        <figcaption><b>Figure 12.</b> Most confusion metrics appear as heatmaps (48), but a long tail is drawn as tables, combinations, bar charts, scatterplots, or even prose — each choice quietly resisting comparison.</figcaption>
+        <figcaption><b>Figure 12.</b> Most confusion metrics appear as heatmaps (48), but a long tail is drawn as tables, combinations, bar charts, scatterplots, or even prose — each choice quietly impeding comparison.</figcaption>
       </figure>
 
       <div class="prose">
@@ -606,7 +604,7 @@
           Coding each figure against Munzner’s channel-effectiveness ordering, the survey found
           <strong>position on a common scale</strong> as the dominant magnitude channel (197 of 296 encodings) and
           <strong>spatial region</strong> dominating identity (170 of 296). Confusion-matrix heatmaps are the notable
-          exception: they trade the highly effective position channel for color saturation, because that is what lets
+          exception: they trade the highly effective position channel for color saturation, because that's what lets
           a single grid scale to many classes at once.
         </p>
       </div>
@@ -631,25 +629,16 @@
         <p class="kicker">The argument</p>
         <h2 class="h">Balance novelty with comparability.</h2>
         <p>
-          None of this is a knock on invention. New encodings — reimagined confusion matrices, network-graph views,
-          flow diagrams of classifier confusion over time — are how the field moves. But when every team invents its
-          own picture, stakeholders lose the ability to weigh one model’s risks against another’s.
+          None of this is meant to discourage creativity. Novel designs — reimagined confusion matrices, network-graph views,
+          flow diagrams of classifier confusion over time — are how the field progresses. But when every team invents its
+          own picture, stakeholders lose the ability to weigh one model’s risks and limitations against another’s.
         </p>
       </div>
       <div class="callout">
-        <p>The survey’s call to the community: keep exploring, but develop shared design guidelines so that a false
-          negative here can be compared to a false negative there — <strong>clarity, drawn out of confusion.</strong></p>
+        <p>Our call to the community: keep exploring, but develop shared design guidelines so that one model can be compared to 
+          another when possible, and in a clear and direct way.</p>
       </div>
-      <div class="prose">
-        <h3 class="h">How this page was built</h3>
-        <p>
-          The interactive confusion matrix and the three data charts run on the survey’s own numbers, in vanilla
-          JavaScript and SVG — no framework, no build step. The larger paper figures load from
-          <code>assets/figures/</code> and the metric example thumbnails from <code>assets/thumbnails/</code>; until
-          you drop the PNGs in, each slot shows a labeled placeholder with the exact filename it expects. See the
-          repository’s <code>README.md</code> for the full drop-in list.
-        </p>
-      </div>
+    
     </section>
   </main>
 </div>
@@ -665,15 +654,7 @@
         <h3 style="margin-top:26px">Cite this work</h3>
         <div class="cite">S. Spivak, M. Creamer, M. Tory, and M. A. Borkin, “Clarity from Confusion: A Survey of Design Choices for Machine Learning Performance Visualization,” IEEE Transactions on Visualization and Computer Graphics, 2024.</div>
       </div>
-      <div>
-        <h2>This site</h2>
-        <p style="color:var(--muted);font-size:15px">
-          An interactive explainer modeled after the
-          <a href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noopener">Transformer&nbsp;Explainer</a>
-          format. Charts reproduce data reported in the paper.
-        </p>
-        <p style="margin-top:14px"><a href="#matrix">↑ Back to the top</a></p>
-      </div>
+    
     </div>
   </div>
 </footer>
