@@ -236,6 +236,20 @@
   .panel svg{width:100%;height:auto;display:block;overflow:visible}
   .bar{fill:var(--plum);transition:fill .15s ease}
   .bar:hover{fill:var(--fp)}
+
+  /* rendered data table (Figure 12) */
+  table.data{width:100%;border-collapse:collapse;font-family:var(--font-display);font-size:14px;color:var(--ink)}
+  table.data th,table.data td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+  table.data thead th{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--plum-deep);
+    border-bottom:2px solid var(--line-strong);font-weight:600}
+  table.data tbody th{font-weight:500}
+  table.data td.n,table.data th.n{text-align:right;font-family:var(--font-mono);position:relative;width:92px}
+  table.data td.n .barbg{position:absolute;left:8px;top:50%;transform:translateY(-50%);height:16px;border-radius:4px;
+    opacity:.24;z-index:0}
+  table.data td.n .v{position:relative;z-index:1}
+  table.data td.n .dash{color:var(--line-strong)}
+  table.data tbody tr:hover{background:color-mix(in srgb,var(--plum) 6%,transparent)}
+  table.data tfoot th,table.data tfoot td{font-weight:700;border-top:2px solid var(--line-strong);border-bottom:none;padding-top:9px}
   .bar-lab{font-family:var(--font-display);font-size:11px;fill:var(--ink)}
   .bar-val{font-family:var(--font-mono);font-size:11px;fill:var(--muted)}
   .axis-line{stroke:var(--line-strong);stroke-width:1}
@@ -585,7 +599,7 @@
         <div id="chartAxisData"></div>
       </div>
 
-      <figure class="fig">
+      <!-- <figure class="fig">
         <div class="frame">
           <img src="assets/figures/fig12-cm-variations.png" alt="Table of confusion matrix rendering variations"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
@@ -596,7 +610,7 @@
           </div>
         </div>
         <figcaption><b>Figure 12.</b> Most confusion metrics appear as heatmaps (48), but a long tail is drawn as tables, combinations, bar charts, scatterplots, or even prose — each choice quietly impeding comparison.</figcaption>
-      </figure>
+      </figure> -->
 
       <div class="prose">
         <h3 class="h">Which perceptual channels do the work</h3>
