@@ -442,7 +442,7 @@
 
     <section class="sec">
       <div class="prose">
-        <p class="kicker">What this is</p>
+        <p class="kicker">Design Choices Have Consequences</p>
         <h2 class="h">A field with no shared way to say “here is how the model does.”</h2>
         <p>
           Machine learning models increasingly make or shape consequential decisions, so the way we 
@@ -450,8 +450,26 @@
           <strong>metrics</strong> and different <strong>chart types</strong> to show essentially the same information in different ways.
           To explore this design space, we surveyed <strong>68 VIS4ML papers</strong> published in IEEE&nbsp;TVCG, ACM&nbsp;CHI,
           and ACM&nbsp;IUI between 2019 and 2023, coding <strong>490 individual error-and-accuracy representations</strong>
-          for what they show and how they show it.
+          for what they show and how they show it. The focus of many of these design choices favor local (project/paper) readability over
+          global comparability. This is understandable, as these are ML papers in the visualization community, so emphasis is often on novel 
+          designs. Still, even use of the same metrics and charts, we found a lot of variability - confusion matrices sometimes showing ground 
+          truth on the y-axis, sometimes on the x-axis, if labeled at all, and accuracy and other metrics presented in a variety of charts where axis 
+          selection can vary.
         </p>
+        <figure class="fig">
+        <div class="frame">
+          <img src="assets/figures/fig11-axes.png" alt="Variety of axis set-up for a select set of metrics"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="ph" style="display:none">
+            <div class="lab2">Figure 11 — Axis set-up variations/div>
+            <div>True-positive rate vs. false-positive rate across thresholds; area under it (AUC) summarizes discrimination.</div>
+            <div class="file">assets/figures/fig11-axes.png</div>
+          </div>
+        </div>
+        <figcaption><b>Figure 11.</b> Variations in metric chart orientation. We showcase the variety of ways the metrics are presented across measured
+goals (model and other variations, boundaries, time, inputs, and other metrics). We find that accuracy and error are frequently,
+but not universally, presented on the y-axis.</figcaption>
+      </figure>
         <p>
           Our findings, in short: enormous creativity, but often at the cost of comparability. Throughout this page, 
           we explore that tension directly — by presenting both the breadth and depth of design creativity and the consequences of diverging approaches.
