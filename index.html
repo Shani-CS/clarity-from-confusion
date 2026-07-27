@@ -196,14 +196,14 @@
   .pill.tp{color:var(--tp-text)} .pill.fp{color:var(--fp-text)} .pill.tn{color:var(--tn-text)} .pill.fn{color:var(--fn-text)}
 
   /* metric cards */
-  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin:26px 0 6px}
+  .card .thumb{aspect-ratio:16/10; gap:16px;margin:26px 0 6px}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
     box-shadow:0 1px 2px rgba(42,34,47,.06), 0 8px 22px -18px rgba(94,58,82,.35);transition:transform .16s ease,box-shadow .16s ease}
   .card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
   .card .thumb{aspect-ratio:16/9;background:
     repeating-linear-gradient(45deg,var(--paper),var(--paper) 9px,#efe9f3 9px,#efe9f3 18px);
     display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--line)}
-  .card .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .card .thumb img{width:100%;height:100%;object-fit:contain;display:block;background:#fff;padding:10px}
   .card .thumb .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:4px;color:var(--muted);font-family:var(--font-mono);font-size:11px;text-align:center;padding:8px}
   .card .thumb .ph svg{width:22px;height:22px;opacity:.6}
