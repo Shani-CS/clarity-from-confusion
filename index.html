@@ -391,6 +391,50 @@
     grid-template-columns:minmax(0, 1fr);
   }
 
+  /* Remove the outline from all existing figures */
+figure.fig .frame {
+  border: none;
+}
+
+/* Three-image row */
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  max-width: var(--maxw);
+  margin: 30px auto;
+  align-items: start;
+}
+
+/* Override the normal standalone-figure spacing inside the grid */
+.figure-grid figure.fig {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+/* Keep all three images visually consistent */
+.figure-grid figure.fig .frame {
+  aspect-ratio: 4 / 3;
+  border: none;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.figure-grid figure.fig img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Stack the images on smaller screens */
+@media (max-width: 760px) {
+  .figure-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
 <body>
