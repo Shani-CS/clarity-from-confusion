@@ -540,8 +540,8 @@
           Machine learning models increasingly make or shape consequential decisions, so the way we 
           report their performance matters. Yet across the visualization literature, many pick different
           <strong>metrics</strong> and different <strong>chart types</strong> to show essentially the same information in different ways.
-          To explore this design space, we surveyed <strong>68 VIS4ML papers</strong> published in IEEE&nbsp;TVCG, ACM&nbsp;CHI,
-          and ACM&nbsp;IUI between 2019 and 2023, coding <strong>490 individual error-and-accuracy representations</strong>
+          To explore this design space, we surveyed <strong>68 ML papers</strong> published in data visualization venues (IEEE&nbsp;TVCG, ACM&nbsp;CHI,
+          and ACM&nbsp;IUI between 2019 and 2023), coding <strong>490 individual error-and-accuracy representations</strong>
           for what they show and how they show it. The focus of many of these design choices favor local (project/paper) readability over
           global comparability. This is understandable, as these are ML papers in the visualization community, so emphasis is often on novel 
           designs. Still, even use of the same metrics and charts, we found a lot of variability - confusion matrices sometimes showing ground 
@@ -569,7 +569,7 @@ but not universally, presented on the y-axis.</figcaption>
       </div>
 
       <div class="stats">
-        <div class="stat"><div class="big">68</div><div class="lil">VIS4ML papers surveyed across three premier venues, 2019–2023.</div></div>
+        <div class="stat"><div class="big">68</div><div class="lil">ML papers surveyed across four premier data visualization venues between 2019 and 2023.</div></div>
         <div class="stat"><div class="big">490</div><div class="lil">Distinct error &amp; accuracy representations coded figure-by-figure.</div></div>
         <div class="stat"><div class="big">54.8%</div><div class="lil">of all representations use just two metrics: accuracy and confusion metrics.</div></div>
       </div>
@@ -707,6 +707,12 @@ but not universally, presented on the y-axis.</figcaption>
         <p class="psub">Among the 40 papers using full confusion matrices, counts of how ground truth was presented.</p>
         <svg id="chartAxis" viewBox="0 0 720 170" aria-hidden="true"></svg>
         <div id="chartAxisData"></div>
+      </div>
+
+      <div class="CMs">
+        <div class="stat"><div class="big">68</div><div class="lil">y-axis for ground truth.</div></div>
+        <div class="stat"><div class="big">490</div><div class="lil">x-axis as ground truth (from the same paper).</div></div>
+        <div class="stat"><div class="big">54.8%</div><div class="lil">no axis labels.</div></div>
       </div>
 
       <!-- <figure class="fig">
