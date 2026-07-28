@@ -719,7 +719,7 @@ but not universally, presented on the y-axis.</figcaption>
         <div id="chartAxisData"></div>
       </div>
 
-      <div class="cards" id="cards"><!-- injected by JS --></div>
+     
 
       <!-- <figure class="fig">
         <div class="frame">
@@ -923,30 +923,6 @@ but not universally, presented on the y-axis.</figcaption>
     cardWrap.appendChild(el);
   });
 
-    /* ================= confusion matrix cards ================= */
-  var CARD_DATA = [
-    {key:"y-axis",    name:"Y-axis",     desc:"An example of a confusion matrix where ground truth is shown on the y-axis.", file:"y-axis.png"},
-    {key:"x-axis",   name:"X-axis",          desc:"An example from the same paper, but now ground truth is on the x-axis.", file:"x-axis.png"},
-    {key:"no labels",      name:"Unlabeled",  desc:"An example from another paper where no ground truth / prediction label is given.", file:"no axis.png"},
-  ];
-  var cardWrap = document.getElementById("cmcards");
-  CARD_DATA.forEach(function(c){
-    var el = document.createElement("div");
-    el.className = "card";
-    el.innerHTML =
-      '<div class="thumb">'+
-        '<img src="assets/thumbnails/'+c.file+'" alt="'+c.name+' example" '+
-             'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'+
-        '<div class="ph" style="display:none">'+
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>'+
-          '<div>thumbnails/'+c.file+'</div>'+
-        '</div>'+
-      '</div>'+
-      '<div class="body"><h4>'+c.name+'</h4>'+
-        '<div class="formula">'+c.formula+'</div>'+
-        '<p>'+c.desc+'</p></div>';
-    cardWrap.appendChild(el);
-  });
 
   /* ================= Figure 4: frequency bar chart ================= */
   var FREQ = [
