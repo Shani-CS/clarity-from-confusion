@@ -467,7 +467,7 @@
             </div>
           </div>
           <p class="caption">Cell shading uses color saturation on a spatial grid — the encoding used in
-            <b>39</b> of the heatmap-based confusion matrices across the surveyed papers. It is efficient for multiple class confusion matrices, but harder to compare across papers.</p>
+            <b>39</b> out of 48 (81%) of the heatmap-based confusion matrices across the surveyed papers. It is efficient for multiple class confusion matrices, but harder to compare across papers.</p>
         </div>
 
         <!-- right: controls + metrics -->
@@ -536,10 +536,20 @@
       <div class="prose">
         <!-- <p class="kicker">Design Choices Have Consequences</p> -->
         <h2 class="h">A field with no shared way to say “here is how the model does.”</h2>
+       
+        <p>To understand the state of the art in model error and accuracy visualization and compare design 
+       choices, we survey leading visualization papers in this space. We identify key difficulties in 
+        conveying the nuance between different classification errors and how selected visualization designs 
+        addressed or aggravated these challenges.We also provide an overview of the design choices made in 
+        presenting error and accuracy to various audiences. We find the variety of formats and styles 
+        chosen to communicate these performance metrics spans both model types and topic areas, complicating 
+        or preventing comparison. Based on this fragmentation, we call for reflection on how to balance 
+        novelty with comparability when differentiating between types of errors.
+        </p>
         <p>
           Machine learning models increasingly make or shape consequential decisions, so the way we 
           report their performance matters. Yet across the visualization literature, many pick different
-          <strong>metrics</strong> and different <strong>chart types</strong> to show essentially the same information in different ways.
+          <strong>metrics</strong> and different <strong>visual representations</strong> to show essentially the same information in different ways.
           To explore this design space, we surveyed <strong>68 ML papers</strong> published in data visualization venues (IEEE&nbsp;TVCG, ACM&nbsp;CHI,
           and ACM&nbsp;IUI between 2019 and 2023), coding <strong>490 individual error-and-accuracy representations</strong>
           for what they show and how they show it. The focus of many of these design choices favor local (project/paper) readability over
@@ -709,11 +719,7 @@ but not universally, presented on the y-axis.</figcaption>
         <div id="chartAxisData"></div>
       </div>
 
-      <div class="stat">
-        <div class="stat"><div class="big">68</div><div class="lil">y-axis for ground truth.</div></div>
-        <div class="stat"><div class="big">490</div><div class="lil">x-axis as ground truth (from the same paper).</div></div>
-        <div class="stat"><div class="big">54.8%</div><div class="lil">no axis labels.</div></div>
-      </div>
+      <div class="cards" id="cards"><!-- injected by JS --></div>
 
       <!-- <figure class="fig">
         <div class="frame">
@@ -899,6 +905,31 @@ but not universally, presented on the y-axis.</figcaption>
     {key:"rocauc",      name:"ROC / AUC",   formula:"TPR vs. FPR, area",       desc:"Threshold-swept trade-off; area under the curve measures class discrimination.", file:"roc-auc.png"}
   ];
   var cardWrap = document.getElementById("cards");
+  CARD_DATA.forEach(function(c){
+    var el = document.createElement("div");
+    el.className = "card";
+    el.innerHTML =
+      '<div class="thumb">'+
+        '<img src="assets/thumbnails/'+c.file+'" alt="'+c.name+' example" '+
+             'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'+
+        '<div class="ph" style="display:none">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>'+
+          '<div>thumbnails/'+c.file+'</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="body"><h4>'+c.name+'</h4>'+
+        '<div class="formula">'+c.formula+'</div>'+
+        '<p>'+c.desc+'</p></div>';
+    cardWrap.appendChild(el);
+  });
+
+    /* ================= confusion matrix cards ================= */
+  var CARD_DATA = [
+    {key:"y-axis",    name:"Y-axis",     desc:"An example of a confusion matrix where ground truth is shown on the y-axis.", file:"y-axis.png"},
+    {key:"x-axis",   name:"X-axis",          desc:"An example from the same paper, but now ground truth is on the x-axis.", file:"x-axis.png"},
+    {key:"no labels",      name:"Unlabeled",  desc:"An example from another paper where no ground truth / prediction label is given.", file:"no axis.png"},
+  ];
+  var cardWrap = document.getElementById("cmcards");
   CARD_DATA.forEach(function(c){
     var el = document.createElement("div");
     el.className = "card";
