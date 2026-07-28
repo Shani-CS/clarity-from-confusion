@@ -495,6 +495,13 @@ figure.fig img {
       Below, we walk through our survey of visualization community machine learning papers exploring
       how the community approaches presenting these metrics. 
     </p>
+         <div class="stats">
+        <div class="stat"><div class="big">68</div><div class="lil">ML papers surveyed across four premier data visualization venues between 2019 and 2023.</div></div>
+        <div class="stat"><div class="big">490</div><div class="lil">Distinct error &amp; accuracy representations coded figure-by-figure.</div></div>
+        <div class="stat"><div class="big">54.8%</div><div class="lil">of all representations are on of two things: accuracy and confusion metrics.</div></div>
+      </div>
+    </section>
+    
     <div class="sourcerow">
       <a class="chip" id="paper" href="#" target="_blank" rel="noopener" title="Add your paper/DOI link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>
@@ -505,7 +512,105 @@ figure.fig img {
         Authors &amp; citation</a>
     </div>
   </header>
-    <!-- interactive lab -->
+
+
+
+
+  <!-- ================= ARTICLE ================= -->
+  <main id="main" tabindex="-1">
+
+    <section class="sec">
+      <div class="prose">
+        <!-- <p class="kicker">Design Choices Have Consequences</p> -->
+        <h2 class="h">Presenting ML performance metrics, a survey of design choices.</h2>
+       
+        <p>To understand the state of the art in model error and accuracy visualization and compare design 
+       choices, we survey leading visualization papers in this space. We identify key difficulties in 
+        conveying the nuance between different classification errors and how selected visualization designs 
+        addressed or aggravated these challenges.We also provide an overview of the design choices made in 
+        presenting error and accuracy to various audiences. We find the variety of formats and styles 
+        chosen to communicate these performance metrics spans both model types and topic areas, complicating 
+        or preventing comparison. Based on this fragmentation, we call for reflection on how to balance 
+        novelty with comparability when differentiating between types of errors.
+        </p>
+        <p>
+          Machine learning models increasingly make or shape consequential decisions, so the way we 
+          report their performance matters. Yet across the visualization literature, many pick different
+          <strong>metrics</strong> and different <strong>visual representations</strong> to show essentially the same information in different ways.
+          To explore this design space, we surveyed <strong>68 ML papers</strong> published in data visualization venues (IEEE&nbsp;TVCG, ACM&nbsp;CHI,
+          and ACM&nbsp;IUI between 2019 and 2023), coding <strong>490 individual error-and-accuracy representations</strong>
+          for what they show and how they show it. The focus of many of these design choices favor local (project/paper) readability over
+          global comparability. This is understandable, as these are ML papers in the visualization community, so emphasis is often on novel 
+          designs. Still, even use of the same metrics and charts, we found a lot of variability - confusion matrices sometimes showing ground 
+          truth on the y-axis, sometimes on the x-axis, if labeled at all, and accuracy and other metrics presented in a variety of charts where axis 
+          selection can vary.
+        </p>
+
+         <!-- FOUR NUMBERS -->
+    <section class="sec" id="four">
+      <div class="prose">
+        <!-- <p class="kicker">The building blocks</p> -->
+        <h2 class="h">Four potential outcomes. That’s often the whole vocabulary.</h2>
+        <p>
+          Any binary prediction lands in one of four buckets — the cells you were just dragging.
+          A <span class="pill tp">TP</span> is a real positive the model caught; a
+          <span class="pill fn">FN</span> is a real positive it missed; a
+          <span class="pill fp">FP</span> is a false alarm; and a
+          <span class="pill tn">TN</span> is a negative correctly left alone.
+        </p>
+        <p>
+          The confusion matrix is special precisely because it keeps <strong>false positives and false negatives
+          separate</strong>. Almost every other metric collapses these four counts into a single number — which is
+          convenient, and supports a certain perspective, but removes the distinction we argue matters in high-risk and human impact settings. 
+          For example, in a cancer screening scenario, a false negative is a missed diagnosis; a false positive is an anxious week and an extra test. Those are not the
+          same mistake, yet a lone accuracy score treats them as interchangeable.
+        </p>
+      </div>
+
+      <figure class="fig">
+        <div class="frame">
+          <img src="assets/figures/fig2-metrics-components.png" alt="Diagram: each metric built from TP, FP, TN, FN pills"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="ph" style="display:none">
+            <div class="lab2">Figure 2 — Metrics and their subcomponents</div>
+            <div>Each common metric, shown as combinations of the same four pills.</div>
+            <div class="file">assets/figures/fig2-metrics-components.png</div>
+          </div>
+        </div>
+        <figcaption><b>Figure 2.</b> Common performance metrics decomposed into the same four counts — the components of a confusion matrix.</figcaption>
+      </figure>
+    </section>
+
+    <!-- METRICS DEFINED -->
+    <section class="sec" id="metrics">
+      <div class="prose">
+        <!-- <p class="kicker">Metrics, defined</p> -->
+        <h2 class="h">Same four numbers, different questions.</h2>
+        <p>
+          Each metric below asks a different question of the confusion matrix. Precision asks “when the model says
+          yes, how often is it right?” Recall asks “of the things that were actually yes, how many did we catch?”
+          They can pull in opposite directions, which is why F1 — their harmonic mean — is often reported as a single
+          balanced score. Hover the cards, then move the sliders above to see each definition move.
+        </p>
+      </div>
+
+      <div class="cards" id="cards"><!-- injected by JS --></div>
+
+      <!-- <figure class="fig">
+        <div class="frame">
+          <img src="assets/figures/fig3b-roc-curve.png" alt="Receiver operating characteristic curve"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="ph" style="display:none">
+            <div class="lab2">Figure 3b — ROC curve</div>
+            <div>True-positive rate vs. false-positive rate across thresholds; area under it (AUC) summarizes discrimination.</div>
+            <div class="file">assets/figures/fig3b-roc-curve.png</div>
+          </div>
+        </div>
+        <figcaption><b>Figure 3b.</b> Unlike a confusion matrix, an ROC curve hides the four raw counts and instead traces the trade-off between the true-positive rate and false-positive rate as the decision threshold sweeps.</figcaption>
+      </figure> -->
+    </section>
+
+           <!-- interactive lab -->
     <div class="lab">
       <div class="lab-head">
         <h2>The confusion matrix</h2>
@@ -601,37 +706,15 @@ figure.fig img {
     </div>
 
 
-
-  <!-- ================= ARTICLE ================= -->
-  <main id="main" tabindex="-1">
-
-    <section class="sec">
-      <div class="prose">
-        <!-- <p class="kicker">Design Choices Have Consequences</p> -->
-        <h2 class="h">Presenting ML performance metrics, a survey of design choices.”</h2>
-       
-        <p>To understand the state of the art in model error and accuracy visualization and compare design 
-       choices, we survey leading visualization papers in this space. We identify key difficulties in 
-        conveying the nuance between different classification errors and how selected visualization designs 
-        addressed or aggravated these challenges.We also provide an overview of the design choices made in 
-        presenting error and accuracy to various audiences. We find the variety of formats and styles 
-        chosen to communicate these performance metrics spans both model types and topic areas, complicating 
-        or preventing comparison. Based on this fragmentation, we call for reflection on how to balance 
-        novelty with comparability when differentiating between types of errors.
-        </p>
         <p>
-          Machine learning models increasingly make or shape consequential decisions, so the way we 
-          report their performance matters. Yet across the visualization literature, many pick different
-          <strong>metrics</strong> and different <strong>visual representations</strong> to show essentially the same information in different ways.
-          To explore this design space, we surveyed <strong>68 ML papers</strong> published in data visualization venues (IEEE&nbsp;TVCG, ACM&nbsp;CHI,
-          and ACM&nbsp;IUI between 2019 and 2023), coding <strong>490 individual error-and-accuracy representations</strong>
-          for what they show and how they show it. The focus of many of these design choices favor local (project/paper) readability over
-          global comparability. This is understandable, as these are ML papers in the visualization community, so emphasis is often on novel 
-          designs. Still, even use of the same metrics and charts, we found a lot of variability - confusion matrices sometimes showing ground 
-          truth on the y-axis, sometimes on the x-axis, if labeled at all, and accuracy and other metrics presented in a variety of charts where axis 
-          selection can vary.
+          Our findings, in short: enormous creativity, but often at the cost of comparability. Throughout this page, 
+          we explore that tension directly — by presenting both the breadth and depth of design creativity and the consequences of diverging approaches.
         </p>
-        <figure class="fig">
+      </div>
+
+
+    
+            <figure class="fig">
         <div class="frame">
           <img src="assets/figures/fig11-axes.png" alt="Variety of axis set-up for a select set of metrics"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
@@ -645,83 +728,8 @@ figure.fig img {
 goals (model and other variations, boundaries, time, inputs, and other metrics). We find that accuracy and error are frequently,
 but not universally, presented on the y-axis.</figcaption>
       </figure>
-        <p>
-          Our findings, in short: enormous creativity, but often at the cost of comparability. Throughout this page, 
-          we explore that tension directly — by presenting both the breadth and depth of design creativity and the consequences of diverging approaches.
-        </p>
-      </div>
 
-      <div class="stats">
-        <div class="stat"><div class="big">68</div><div class="lil">ML papers surveyed across four premier data visualization venues between 2019 and 2023.</div></div>
-        <div class="stat"><div class="big">490</div><div class="lil">Distinct error &amp; accuracy representations coded figure-by-figure.</div></div>
-        <div class="stat"><div class="big">54.8%</div><div class="lil">of all representations are on of two things: accuracy and confusion metrics.</div></div>
-      </div>
-    </section>
-
-    <!-- FOUR NUMBERS -->
-    <section class="sec" id="four">
-      <div class="prose">
-        <!-- <p class="kicker">The building blocks</p> -->
-        <h2 class="h">Four potential outcomes. That’s often the whole vocabulary.</h2>
-        <p>
-          Any binary prediction lands in one of four buckets — the cells you were just dragging.
-          A <span class="pill tp">TP</span> is a real positive the model caught; a
-          <span class="pill fn">FN</span> is a real positive it missed; a
-          <span class="pill fp">FP</span> is a false alarm; and a
-          <span class="pill tn">TN</span> is a negative correctly left alone.
-        </p>
-        <p>
-          The confusion matrix is special precisely because it keeps <strong>false positives and false negatives
-          separate</strong>. Almost every other metric collapses these four counts into a single number — which is
-          convenient, and supports a certain perspective, but removes the distinction we argue matters in high-risk and human impact settings. 
-          For example, in a cancer screening scenario, a false negative is a missed diagnosis; a false positive is an anxious week and an extra test. Those are not the
-          same mistake, yet a lone accuracy score treats them as interchangeable.
-        </p>
-      </div>
-
-      <figure class="fig">
-        <div class="frame">
-          <img src="assets/figures/fig2-metrics-components.png" alt="Diagram: each metric built from TP, FP, TN, FN pills"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-          <div class="ph" style="display:none">
-            <div class="lab2">Figure 2 — Metrics and their subcomponents</div>
-            <div>Each common metric, shown as combinations of the same four pills.</div>
-            <div class="file">assets/figures/fig2-metrics-components.png</div>
-          </div>
-        </div>
-        <figcaption><b>Figure 2.</b> Common performance metrics decomposed into the same four counts — the components of a confusion matrix.</figcaption>
-      </figure>
-    </section>
-
-    <!-- METRICS DEFINED -->
-    <section class="sec" id="metrics">
-      <div class="prose">
-        <!-- <p class="kicker">Metrics, defined</p> -->
-        <h2 class="h">Same four numbers, different questions.</h2>
-        <p>
-          Each metric below asks a different question of the confusion matrix. Precision asks “when the model says
-          yes, how often is it right?” Recall asks “of the things that were actually yes, how many did we catch?”
-          They can pull in opposite directions, which is why F1 — their harmonic mean — is often reported as a single
-          balanced score. Hover the cards, then move the sliders above to see each definition move.
-        </p>
-      </div>
-
-      <div class="cards" id="cards"><!-- injected by JS --></div>
-
-      <!-- <figure class="fig">
-        <div class="frame">
-          <img src="assets/figures/fig3b-roc-curve.png" alt="Receiver operating characteristic curve"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-          <div class="ph" style="display:none">
-            <div class="lab2">Figure 3b — ROC curve</div>
-            <div>True-positive rate vs. false-positive rate across thresholds; area under it (AUC) summarizes discrimination.</div>
-            <div class="file">assets/figures/fig3b-roc-curve.png</div>
-          </div>
-        </div>
-        <figcaption><b>Figure 3b.</b> Unlike a confusion matrix, an ROC curve hides the four raw counts and instead traces the trade-off between the true-positive rate and false-positive rate as the decision threshold sweeps.</figcaption>
-      </figure> -->
-    </section>
-
+   
     <!-- THE SURVEY -->
     <section class="sec" id="survey">
       <div class="prose">
@@ -778,10 +786,11 @@ but not universally, presented on the y-axis.</figcaption>
       </div> -->
 
       <div class="prose">
-        <h3 class="h">The comparability problem, in one statistic</h3>
+        <h3 class="h">Tilting at axes</h3>
         <p>
           40 of the 68 papers included a full confusion matrix — though these differed on which axis is used for
-          ground truth. This inconsistency, small as it seems, can make cross-paper comparison difficult.
+          ground truth. This inconsistency, small as it seems, can make cross-paper comparison difficult. While we don't 
+          recommend strict standardization, some space for commonly accepted formats could help with comparability, so readers don't have to reorient with each new chart.
         </p>
       </div>
 
