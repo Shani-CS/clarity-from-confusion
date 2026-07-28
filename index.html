@@ -302,6 +302,95 @@
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   }
+
+
+  /* ---------- centered site layout ---------- */
+  body{
+    text-align:center;
+  }
+
+  nav.top{
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  nav.top .spacer{
+    display:none;
+  }
+
+  .wrap,
+  .prose,
+  header.hero,
+  main,
+  section,
+  footer,
+  footer .grid > div{
+    text-align:center;
+  }
+
+  h1,
+  h2.h,
+  h3.h,
+  .lede,
+  .kicker,
+  .caption,
+  figure.fig figcaption,
+  .panel .ptitle,
+  .panel .psub,
+  footer h2,
+  footer h3,
+  footer p{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .sourcerow,
+  .lab-head,
+  .matrix-row,
+  .stats,
+  .cards,
+  footer .grid{
+    justify-content:center;
+  }
+
+  .lab-head{
+    align-items:center;
+  }
+
+  .sl{
+    grid-template-columns:auto minmax(0,1fr) auto;
+    justify-content:center;
+  }
+  .sl label,
+  .sl output{
+    text-align:center;
+  }
+
+  .m{
+    grid-template-columns:120px minmax(0,1fr) auto;
+  }
+  .m .mname,
+  .m .mval,
+  .m .formula{
+    text-align:center;
+  }
+
+  .card .body,
+  .stat,
+  .callout,
+  .cite,
+  table.data th,
+  table.data td{
+    text-align:center;
+  }
+
+  .panel .ptitle{
+    justify-content:center;
+  }
+
+  footer .grid{
+    grid-template-columns:minmax(0, 1fr);
+  }
+
 </style>
 </head>
 <body>
