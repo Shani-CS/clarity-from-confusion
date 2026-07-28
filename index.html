@@ -396,25 +396,47 @@ figure.fig .frame {
   border: none;
 }
 
-/* Three-image row */
+/* ---------- smaller figures ---------- */
+
+/* Make existing standalone PNG figures smaller */
+figure.fig {
+  max-width: 760px;
+  margin: 30px auto;
+}
+
+figure.fig .frame {
+  border: none;
+}
+
+figure.fig img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* ---------- three smaller images side by side ---------- */
+
 .figure-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  max-width: var(--maxw);
+  gap: 14px;
+
+  /* Reduce this number to make the entire row smaller */
+  max-width: 850px;
+
   margin: 30px auto;
   align-items: start;
 }
 
-/* Override the normal standalone-figure spacing inside the grid */
 .figure-grid figure.fig {
   width: 100%;
   max-width: none;
   margin: 0;
 }
 
-/* Keep all three images visually consistent */
 .figure-grid figure.fig .frame {
+  width: 100%;
   aspect-ratio: 4 / 3;
   border: none;
   border-radius: var(--r);
@@ -425,14 +447,21 @@ figure.fig .frame {
 .figure-grid figure.fig img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
   display: block;
-  object-fit: cover;
 }
 
-/* Stack the images on smaller screens */
+/* Slightly smaller captions */
+.figure-grid figure.fig figcaption {
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* Stack on smaller screens */
 @media (max-width: 760px) {
   .figure-grid {
     grid-template-columns: 1fr;
+    max-width: 420px;
   }
 }
 </style>
