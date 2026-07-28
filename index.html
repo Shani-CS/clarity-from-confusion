@@ -433,32 +433,32 @@
 
         <!-- left: the matrix -->
         <div class="lab-left">
-          <div class="axis-top"><span class="label">Predicted label</span></div>
+          <div class="axis-top"><span class="label">Model Prediction</span></div>
           <div class="colhdr"><span>Positive</span><span>Negative</span></div>
           <div class="matrix-row">
-            <div class="axis-left"><span class="label">Actual label</span></div>
+            <div class="axis-left"><span class="label">Ground Truth</span></div>
             <div class="rowhdr"><span>Positive</span><span>Negative</span></div>
             <div class="matrix" id="matrixCells">
               <div class="cell" data-k="tp" style="--k:var(--tp);--k-text:var(--tp-text)">
-                <div><span class="tag">TP</span><div class="sub">True positive<br>caught &amp; correct</div></div>
+                <div><span class="tag">TP</span><div class="sub">True positive<br>(correct)</div></div>
                 <div class="num" data-num="tp">70</div>
               </div>
               <div class="cell" data-k="fn" style="--k:var(--fn);--k-text:var(--fn-text)">
-                <div><span class="tag">FN</span><div class="sub">False negative<br>missed it</div></div>
+                <div><span class="tag">FN</span><div class="sub">False negative<br>(missed a positive)</div></div>
                 <div class="num" data-num="fn">30</div>
               </div>
               <div class="cell" data-k="fp" style="--k:var(--fp);--k-text:var(--fp-text)">
-                <div><span class="tag">FP</span><div class="sub">False positive<br>false alarm</div></div>
+                <div><span class="tag">FP</span><div class="sub">False positive<br>(missed a negative)</div></div>
                 <div class="num" data-num="fp">12</div>
               </div>
               <div class="cell" data-k="tn" style="--k:var(--tn);--k-text:var(--tn-text)">
-                <div><span class="tag">TN</span><div class="sub">True negative<br>correctly rejected</div></div>
+                <div><span class="tag">TN</span><div class="sub">True negative<br>(correct)</div></div>
                 <div class="num" data-num="tn">88</div>
               </div>
             </div>
           </div>
-          <p class="caption">Cell shading uses <b>color saturation on a spatial grid</b> — the encoding the survey found in
-            <b>39</b> of the heatmap-based confusion matrices. It is efficient for many classes, but harder to compare across papers.</p>
+          <p class="caption">Cell shading uses color saturation on a spatial grid — the encoding the survey found in
+            <b>39</b> of the heatmap-based confusion matrices. It is efficient for multiple class confusion matrices, but harder to compare across papers.</p>
         </div>
 
         <!-- right: controls + metrics -->
@@ -759,8 +759,8 @@ but not universally, presented on the y-axis.</figcaption>
         </p>
       </div>
       <div class="callout">
-        <p>Our call to the community: keep exploring, but develop shared design guidelines so that one model can be compared to 
-          another when possible, and in a clear and direct way.</p>
+        <p>Our call to the community: keep exploring, but develop shared design guidelines so that one model's performance can be compared to 
+          another's when possible, and in a contextualized, clear and direct way.</p>
       </div>
     
     </section>
