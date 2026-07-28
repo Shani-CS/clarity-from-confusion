@@ -704,7 +704,24 @@ figure.fig img {
         </div>
       </div>
     </div>
+ 
+        <div class="prose">
+        <h3 class="h">Tilting at axes</h3>
+        <p>
+          40 of the 68 papers included a full confusion matrix — though these differed on which axis is used for
+          ground truth. This inconsistency, small as it seems, can make cross-paper comparison difficult. While we don't 
+          recommend strict standardization, some space for commonly accepted formats could help with comparability, so readers don't have to reorient with each new chart.
+        </p>
+      </div>
 
+      <div class="panel">
+        <p class="ptitle"><span style="width:10px;height:10px;border-radius:3px;background:var(--gold);display:inline-block"></span>Which axis is “ground truth”?</p>
+        <p class="psub">Among the 40 papers using full confusion matrices, counts of how ground truth was presented.</p>
+        <svg id="chartAxis" viewBox="0 0 720 170" aria-hidden="true"></svg>
+        <div id="chartAxisData"></div>
+      </div>
+
+     
 
         <p>
           Our findings, in short: enormous creativity, but often at the cost of comparability. Throughout this page, 
@@ -734,7 +751,7 @@ but not universally, presented on the y-axis.</figcaption>
     <section class="sec" id="survey">
       <div class="prose">
         <!-- <p class="kicker">What the field actually draws</p> -->
-        <h2 class="h">The most common “visualization” isn’t a chart at all.</h2>
+        <h2 class="h">The most common way to present metrics isn’t a chart at all, it's text-based.</h2>
         <p>
           When the survey tallied every representation, the two most frequent ways to communicate model performance
           were actually text-based: a <strong>table</strong> and within a <strong>sentence of text</strong>. Purpose-built
@@ -785,23 +802,7 @@ but not universally, presented on the y-axis.</figcaption>
         <div id="chartTimeData"></div>
       </div> -->
 
-      <div class="prose">
-        <h3 class="h">Tilting at axes</h3>
-        <p>
-          40 of the 68 papers included a full confusion matrix — though these differed on which axis is used for
-          ground truth. This inconsistency, small as it seems, can make cross-paper comparison difficult. While we don't 
-          recommend strict standardization, some space for commonly accepted formats could help with comparability, so readers don't have to reorient with each new chart.
-        </p>
-      </div>
-
-      <div class="panel">
-        <p class="ptitle"><span style="width:10px;height:10px;border-radius:3px;background:var(--gold);display:inline-block"></span>Which axis is “ground truth”?</p>
-        <p class="psub">Among the 40 papers using full confusion matrices, counts of how ground truth was presented.</p>
-        <svg id="chartAxis" viewBox="0 0 720 170" aria-hidden="true"></svg>
-        <div id="chartAxisData"></div>
-      </div>
-
-     
+    
 
       <!-- <figure class="fig">
         <div class="frame">
