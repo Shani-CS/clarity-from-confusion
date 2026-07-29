@@ -1024,8 +1024,8 @@ but not universally, presented on the y-axis.</figcaption>
     {key:"recall",      name:"Recall",      formula:"TP / (TP + FN)",          desc:"Of all real positives, how many were caught? Punishes misses. Also called sensitivity.", file:"recall.png"},
     {key:"specificity", name:"Specificity", formula:"TN / (FP + TN)",          desc:"Of all real negatives, how many were correctly left alone?", file:"specificity.png"},
     {key:"f1",          name:"F1 score",    formula:"2TP / (2TP + FP + FN)",   desc:"Harmonic mean of precision and recall — one number when both errors matter.", file:"f1.png"},
-    {key:"confusion",   name:"Confusion matrix", formula:"TP · FP · TN · FN",  desc:"The only view that keeps all four outcomes separate. Usually drawn as a heatmap.", file:"confusion-matrix.png"},
-    {key:"rocauc",      name:"ROC / AUC",   formula:"TPR vs. FPR, area",       desc:"Threshold-swept trade-off; area under the curve measures class discrimination.", file:"roc-auc.png"}
+    {key:"confusion",   name:"Confusion matrix", formula:"TP · FP · TN · FN",  desc:"The only view that keeps all four outcomes separate. Usually drawn as a heatmap.", file:"cm.png"},
+    {key:"rocauc",      name:"ROC / AUC",   formula:"TPR vs. FPR, area",       desc:"Threshold-swept trade-off; area under the curve measures class discrimination.", file:"auc.png"}
   ];
   var cardWrap = document.getElementById("cards");
   CARD_DATA.forEach(function(c){
