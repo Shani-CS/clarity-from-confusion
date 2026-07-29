@@ -497,7 +497,7 @@ figure.fig img {
     <h2> A Survey of Design Choices for Machine Learning Performance Visualization</h2>
     <p class="lede">
       The machine learning performance metrics you ecounter — accuracy, precision, recall, F1 —
-      are built from just <em>four main numbers</em>. Move them below and watch each metric recompute.
+      are built from just <em>four main numbers</em>. 
       Below, we walk through our survey of visualization community machine learning papers exploring
       how the community approaches presenting these metrics. 
     </p>
@@ -508,10 +508,10 @@ figure.fig img {
       </div>
     </section>
     
-    <div class="sourcerow">
-      <a class="chip" id="paper" href="#" target="_blank" rel="noopener" title="Add your paper/DOI link">
+ <div class="sourcerow">
+      <!-- <a class="chip" id="paper" href="#" target="_blank" rel="noopener" title="Add your paper/DOI link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>
-        Read the paper (PDF)</a>
+        Read the paper (PDF)</a> --> -->
 
       <a class="chip" href="#authors">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
@@ -533,11 +533,13 @@ figure.fig img {
         <p>To understand the state of the art in model error and accuracy visualization and compare design 
        choices, we survey leading visualization papers in this space. We identify key difficulties in 
         conveying the nuance between different classification errors and how selected visualization designs 
-        addressed or aggravated these challenges.We also provide an overview of the design choices made in 
+        addressed or aggravated these challenges. We also provide an overview of the design choices made in 
         presenting error and accuracy to various audiences. We find the variety of formats and styles 
         chosen to communicate these performance metrics spans both model types and topic areas, complicating 
         or preventing comparison. Based on this fragmentation, we call for reflection on how to balance 
-        novelty with comparability when differentiating between types of errors.
+        novelty with comparability when differentiating between types of errors. We hope this information can help 
+         readers understand trends in ML performance visualization design and benefit those designing ML metric presentations
+          across research areas.
         </p>
         <p>
           Machine learning models increasingly make or shape consequential decisions, so the way we 
@@ -558,7 +560,7 @@ figure.fig img {
         <!-- <p class="kicker">The building blocks</p> -->
         <h2 class="h">Four potential outcomes. That’s often the whole vocabulary.</h2>
         <p>
-          Any binary prediction lands in one of four buckets — the cells you were just dragging.
+          Any binary prediction lands in one of four buckets.
           A <span class="pill tp">TP</span> is a real positive the model caught; a
           <span class="pill fn">FN</span> is a real positive it missed; a
           <span class="pill fp">FP</span> is a false alarm; and a
@@ -573,18 +575,7 @@ figure.fig img {
         </p>
       </div>
 
-      <figure class="fig">
-        <div class="frame">
-          <img src="assets/figures/fig2-metrics-components.png" alt="Diagram: each metric built from TP, FP, TN, FN pills"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-          <div class="ph" style="display:none">
-            <div class="lab2">Figure 2 — Metrics and their subcomponents</div>
-            <div>Each common metric, shown as combinations of the same four pills.</div>
-            <div class="file">assets/figures/fig2-metrics-components.png</div>
-          </div>
-        </div>
-        <figcaption><b>Figure 2.</b> Common performance metrics decomposed into the same four counts — the components of a confusion matrix.</figcaption>
-      </figure>
+     
     </section>
 
     <!-- METRICS DEFINED -->
@@ -595,10 +586,23 @@ figure.fig img {
         <p>
           Each metric below asks a different question of the confusion matrix. Precision asks “when the model classifies a positive, how often is it right?” Recall asks “of the things that were actually positive, how many did we catch?”
           They can pull in opposite directions, which is why F1 — their harmonic mean — is often reported as a single
-          balanced score. Below are examples of how these four numbers combine across popular metrics. We display each metric in the format most frequently used for that metric in the surveyed papers (see Figure 7 for more details).
+          balanced score. Below are examples of how these four numbers combine across popular metrics. We display each metric in the format most frequently used for that metric in the surveyed papers (see figures below for more details).
         </p>
       </div>
-
+      
+ <figure class="fig">
+        <div class="frame">
+          <img src="assets/figures/fig2-metrics-components.png" alt="Diagram: each metric built from TP, FP, TN, FN pills"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="ph" style="display:none">
+            <div class="lab2">Figure 2 — Metrics and their subcomponents</div>
+            <div>Each common metric, shown as combinations of the same four pills.</div>
+            <div class="file">assets/figures/fig2-metrics-components.png</div>
+          </div>
+        </div>
+        <figcaption>Common performance metrics decomposed into the same four counts — the components of a confusion matrix.</figcaption>
+      </figure>
+      
       <div class="cards" id="cards"><!-- injected by JS --></div>
 
       <!-- <figure class="fig">
@@ -785,7 +789,7 @@ figure.fig img {
             <div class="file">assets/figures/fig11-axes.png</div>
           </div>
         </div>
-        <figcaption><b>Figure 11.</b> Variations in metric chart orientation. We showcase the variety of ways the metrics are presented across measured
+        <figcaption>Variations in metric chart orientation. We showcase the variety of ways the metrics are presented across measured
 goals (model and other variations, boundaries, time, inputs, and other metrics). We find that accuracy and error are frequently,
 but not universally, presented on the y-axis.</figcaption>
       </figure>
@@ -828,7 +832,7 @@ but not universally, presented on the y-axis.</figcaption>
             <div class="file">assets/figures/fig7-metric-vs-encoding.png</div>
           </div>
         </div>
-        <figcaption><b>Figure 7.</b> Accuracy is most often shown as text, tables, line and bar charts; confusion metrics as heatmaps; precision and recall tend to be shown together in tables.</figcaption>
+        <figcaption>Accuracy is most often shown as text, tables, line and bar charts; confusion metrics as heatmaps; precision and recall tend to be shown together in tables.</figcaption>
       </figure>
 <!-- 
       <div class="prose">
@@ -883,7 +887,7 @@ but not universally, presented on the y-axis.</figcaption>
             <div class="file">assets/figures/fig14-channel-combos.png</div>
           </div>
         </div>
-        <figcaption><b>Figure 14.</b> Position-on-common-scale paired with spatial region and color hue accounts for most encodings; color saturation × spatial region is the signature of the confusion-matrix heatmap.</figcaption>
+        <figcaption>Position-on-common-scale paired with spatial region and color hue accounts for most encodings; color saturation × spatial region is the signature of the confusion-matrix heatmap.</figcaption>
       </figure>
     </section>
 
@@ -891,7 +895,7 @@ but not universally, presented on the y-axis.</figcaption>
     <section class="sec">
       <div class="prose">
         <!-- <p class="kicker">The argument</p> -->
-        <h2 class="h">Balance novelty with comparability.</h2>
+        <h2 class="h">Recommendation: Balance novelty with comparability.</h2>
         <p>
           None of this is meant to discourage creativity. Novel designs — reimagined confusion matrices, network-graph views,
           flow diagrams of classifier confusion over time — are how the field progresses. But when every team invents its
@@ -914,9 +918,9 @@ but not universally, presented on the y-axis.</figcaption>
       <div>
         <h2>Authors</h2>
         <p class="authors">Shani Spivak · Mackenzie Creamer · Melanie Tory · Michelle A. Borkin</p>
-        <p style="color:var(--muted);font-size:15px">Khoury College of Computer Sciences, Northeastern University, Boston, MA.</p>
-        <h3 style="margin-top:26px">Cite this work</h3>
-        <div class="cite">S. Spivak, M. Creamer, M. Tory, and M. A. Borkin, “Clarity from Confusion: A Survey of Design Choices for Machine Learning Performance Visualization,” arXiv, 2026.</div>
+        <p style="color:var(--muted);font-size:15px">Khoury College of Computer Sciences, Northeastern University, Boston, MA and Oakland, CA.</p>
+        <!-- <h3 style="margin-top:26px">Cite this work</h3>
+        <div class="cite">S. Spivak, M. Creamer, M. Tory, and M. A. Borkin, “Clarity from Confusion: A Survey of Design Choices for Machine Learning Performance Visualization,” arXiv, 2026.</div> -->
       </div>
     
     </div>
