@@ -585,10 +585,9 @@ figure.fig img {
         <!-- <p class="kicker">Metrics, defined</p> -->
         <h2 class="h">Same four numbers, different questions.</h2>
         <p>
-          Each metric below asks a different question of the confusion matrix. Precision asks “when the model says
-          yes, how often is it right?” Recall asks “of the things that were actually yes, how many did we catch?”
+          Each metric below asks a different question of the confusion matrix. Precision asks “when the model classifies a positive, how often is it right?” Recall asks “of the things that were actually positive, how many did we catch?”
           They can pull in opposite directions, which is why F1 — their harmonic mean — is often reported as a single
-          balanced score. Hover the cards, then move the sliders above to see each definition move.
+          balanced score. Below are example of how these four numbers combine across popular metrics. We display each metric in the format most frequently used for that metric in the surveyed papers (see Figure 7 for more details).
         </p>
       </div>
 
@@ -1022,7 +1021,7 @@ but not universally, presented on the y-axis.</figcaption>
     {key:"recall",      name:"Recall",      formula:"TP / (TP + FN)",          desc:"Of all real positives, how many were caught? Punishes misses. Also called sensitivity.", file:"recall.png"},
     {key:"specificity", name:"Specificity", formula:"TN / (FP + TN)",          desc:"Of all real negatives, how many were correctly left alone?", file:"specificity.png"},
     {key:"f1",          name:"F1 score",    formula:"2TP / (2TP + FP + FN)",   desc:"Harmonic mean of precision and recall — one number when both errors matter.", file:"f1.png"},
-    {key:"confusion",   name:"Confusion matrix", formula:"TP · FP · TN · FN",  desc:"The only view that keeps all four outcomes separate. Usually drawn as a heatmap.", file:"cm.png"},
+    // {key:"confusion",   name:"Confusion matrix", formula:"TP · FP · TN · FN",  desc:"The only view that keeps all four outcomes separate. Usually drawn as a heatmap.", file:"cm.png"},
     {key:"rocauc",      name:"ROC / AUC",   formula:"TPR vs. FPR, area",       desc:"Threshold-swept trade-off; area under the curve measures class discrimination.", file:"auc.png"}
   ];
   var cardWrap = document.getElementById("cards");
